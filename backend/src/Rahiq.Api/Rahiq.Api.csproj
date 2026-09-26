@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <UserSecretsId>rahiq-api</UserSecretsId>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Serilog.AspNetCore" />
+    <PackageReference Include="Serilog.Sinks.Seq" />
+    <PackageReference Include="AspNetCore.HealthChecks.NpgSql" />
+    <PackageReference Include="AspNetCore.HealthChecks.Redis" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Reviewed SQL migrations (ADR-012), applied by `dotnet Rahiq.Api.dll migrate`. -->
+    <EmbeddedResource Include="../../db/migrations/*.sql" LogicalName="Rahiq.Api.db.migrations.%(Filename)%(Extension)" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Modules/Catalog/Rahiq.Modules.Catalog/Rahiq.Modules.Catalog.csproj" />
+    <ProjectReference Include="../Modules/Inventory/Rahiq.Modules.Inventory/Rahiq.Modules.Inventory.csproj" />
+    <ProjectReference Include="../Modules/Pricing/Rahiq.Modules.Pricing/Rahiq.Modules.Pricing.csproj" />
+    <ProjectReference Include="../Modules/Cart/Rahiq.Modules.Cart/Rahiq.Modules.Cart.csproj" />
+    <ProjectReference Include="../Modules/Ordering/Rahiq.Modules.Ordering/Rahiq.Modules.Ordering.csproj" />
+    <ProjectReference Include="../Modules/Payments/Rahiq.Modules.Payments/Rahiq.Modules.Payments.csproj" />
+    <ProjectReference Include="../Modules/Shipping/Rahiq.Modules.Shipping/Rahiq.Modules.Shipping.csproj" />
+    <ProjectReference Include="../Modules/Customers/Rahiq.Modules.Customers/Rahiq.Modules.Customers.csproj" />
+    <ProjectReference Include="../Modules/Content/Rahiq.Modules.Content/Rahiq.Modules.Content.csproj" />
+    <ProjectReference Include="../Modules/Documents/Rahiq.Modules.Documents/Rahiq.Modules.Documents.csproj" />
+    <ProjectReference Include="../Modules/Notifications/Rahiq.Modules.Notifications/Rahiq.Modules.Notifications.csproj" />
+    <ProjectReference Include="../Modules/Conversations/Rahiq.Modules.Conversations/Rahiq.Modules.Conversations.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Rahiq.ArchitectureTests" />
+    <InternalsVisibleTo Include="Rahiq.Testing" />
+    <InternalsVisibleTo Include="Rahiq.CommerceTests" />
+    <InternalsVisibleTo Include="Rahiq.IntegrationTests" />
+  </ItemGroup>
+</Project>

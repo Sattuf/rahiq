@@ -1,0 +1,142 @@
+namespace Rahiq.Modules.Documents.Templates;
+
+/// <summary>
+/// DRAFT legal texts (compliance.md §3, "E-ticaret"): Ön Bilgilendirme Formu and Mesafeli Satış Sözleşmesi under
+/// Law No. 6502 and the Distance Contracts Regulation. They MUST be reviewed by the store's lawyer, in each language,
+/// before launch (testing.md launch list). The Turkish text is the binding one; the others are translations for the buyer.
+/// </summary>
+internal static class ContractTexts
+{
+    public sealed record Texts(
+        string Dir,
+        string PreInfoTitle,
+        string SalesTitle,
+        string Draft,
+        string Seller,
+        string Buyer,
+        string Name,
+        string Address,
+        string Phone,
+        string Email,
+        string TaxInfo,
+        string Mersis,
+        string Etbis,
+        string Kep,
+        string Delivery,
+        string InvoiceAddress,
+        string Products,
+        string Product,
+        string Qty,
+        string UnitPrice,
+        string Discount,
+        string LineTotal,
+        string Vat,
+        string Subtotal,
+        string Shipping,
+        string CodFee,
+        string Total,
+        string VatIncluded,
+        string PaymentMethod,
+        string Card,
+        string Cod,
+        string DeliveryTerms,
+        string WithdrawalTitle,
+        string Withdrawal,
+        string WithdrawalExceptions,
+        string NotReturnable,
+        string Complaints,
+        string Date,
+        string OrderNumberNote,
+        string[] SalesArticles);
+
+    public static Texts For(string locale) => locale switch
+    {
+        "ar" => Arabic,
+        "en" => English,
+        _ => Turkish,
+    };
+
+    private static readonly Texts Turkish = new(
+        "ltr",
+        "Ön Bilgilendirme Formu",
+        "Mesafeli Satış Sözleşmesi",
+        "TASLAK — hukuki inceleme bekliyor",
+        "Satıcı", "Alıcı", "Ad / Unvan", "Adres", "Telefon", "E-posta", "Vergi dairesi / no", "MERSİS no", "ETBİS kayıt no", "KEP adresi",
+        "Teslimat adresi", "Fatura adresi",
+        "Sözleşme konusu ürünler", "Ürün", "Adet", "Birim fiyat", "İndirim", "Tutar", "KDV",
+        "Ara toplam", "Kargo", "Kapıda ödeme hizmet bedeli", "Toplam", "Tüm fiyatlara KDV dahildir.",
+        "Ödeme şekli", "Kredi / banka kartı (3D Secure, taksit seçeneğiyle)", "Kapıda ödeme",
+        "Ürünler, siparişin onayından itibaren en geç 30 gün içinde, genellikle 1 iş günü içinde kargoya verilir ve yukarıdaki adrese teslim edilir.",
+        "Cayma hakkı",
+        "Alıcı, ürünün kendisine veya gösterdiği üçüncü kişiye teslim edildiği günden itibaren 14 gün içinde hiçbir gerekçe göstermeksizin ve cezai şart ödemeksizin sözleşmeden cayma hakkına sahiptir. Cayma bildirimi hesabınızdan, iletişim formundan veya e-posta ile yapılabilir. Satıcı, cayma bildiriminin ulaşmasından itibaren 14 gün içinde tahsil edilen bedeli iade eder.",
+        "Mesafeli Sözleşmeler Yönetmeliği md. 15 uyarınca şu ürünlerde cayma hakkı kullanılamaz: çabuk bozulabilen veya son kullanma tarihi geçme ihtimali olan ürünler (bal, ballı kuruyemiş, ballı karışımlar); teslimden sonra ambalajı, bandı, mührü açılmış olup iadesi sağlık ve hijyen açısından uygun olmayan ürünler (koruma bandı açılmış parfüm). Ürün hasarlı veya hatalı teslim edilmişse Alıcının yasal hakları saklıdır.",
+        "Cayma hakkı kapsamı dışında (hasarlı/hatalı teslim hariç)",
+        "Şikâyet ve itirazlar, Ticaret Bakanlığınca her yıl belirlenen parasal sınırlar dahilinde Alıcının yerleşim yerindeki Tüketici Hakem Heyetine veya Tüketici Mahkemesine yapılabilir.",
+        "Tarih",
+        "Sipariş numarası onay e-postasında bildirilir.",
+        [
+            "Taraflar: Bu sözleşme, yukarıda bilgileri yer alan Satıcı ile Alıcı arasında, Alıcının internet sitesi üzerinden elektronik ortamda verdiği sipariş üzerine kurulmuştur.",
+            "Konu: Sözleşmenin konusu, aşağıda nitelikleri ve satış fiyatı belirtilen ürünlerin satışı ve teslimidir; taraflar 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği hükümlerine tabidir.",
+            "Ön bilgilendirme: Alıcı, siparişini onaylamadan önce ön bilgilendirme formunu okuduğunu ve elektronik ortamda onayladığını kabul eder.",
+            "Teslimat: Ürünler, sipariş onayından itibaren yasal 30 günlük süre içinde teslim edilir. Teslimat masrafı yukarıda belirtilmiştir.",
+            "Ürün güvenliği: Gıda ürünlerinin parti numarası ve son tüketim tarihi etikette ve ürün sayfasında yer alır. Bal ürünleri 1 yaşından küçük bebeklere verilmemelidir.",
+            "Cayma hakkı ve istisnaları ön bilgilendirme formunda belirtildiği gibidir.",
+            "Uyuşmazlık: Uyuşmazlıklarda Tüketici Hakem Heyetleri ve Tüketici Mahkemeleri yetkilidir.",
+        ]);
+
+    private static readonly Texts Arabic = new(
+        "rtl",
+        "نموذج المعلومات المسبقة",
+        "عقد البيع عن بُعد",
+        "مسودة — بانتظار المراجعة القانونية",
+        "البائع", "المشتري", "الاسم / الصفة", "العنوان", "الهاتف", "البريد الإلكتروني", "دائرة الضريبة / الرقم", "رقم MERSİS", "رقم التسجيل في ETBİS", "عنوان KEP",
+        "عنوان التسليم", "عنوان الفاتورة",
+        "المنتجات موضوع العقد", "المنتج", "الكمية", "سعر الوحدة", "الخصم", "المبلغ", "الضريبة",
+        "المجموع الفرعي", "الشحن", "رسم الدفع عند الاستلام", "الإجمالي", "جميع الأسعار شاملة ضريبة القيمة المضافة.",
+        "طريقة الدفع", "بطاقة ائتمان أو خصم (3D Secure، مع إمكانية التقسيط)", "الدفع عند الاستلام",
+        "تُسلَّم المنتجات لشركة الشحن خلال 30 يومًا على الأكثر من تأكيد الطلب، وعادةً خلال يوم عمل واحد، وتُسلَّم إلى العنوان أعلاه.",
+        "حق الانسحاب",
+        "يحق للمشتري الانسحاب من العقد خلال 14 يومًا من تاريخ تسليم المنتج إليه أو إلى من يحدده، دون إبداء أي سبب ودون دفع أي غرامة. يمكن إرسال إشعار الانسحاب من حسابك أو من نموذج التواصل أو بالبريد الإلكتروني. يعيد البائع المبلغ المحصّل خلال 14 يومًا من وصول الإشعار.",
+        "وفق المادة 15 من لائحة العقود عن بعد، لا يسري حق الانسحاب على: المنتجات سريعة التلف أو التي قد تنتهي صلاحيتها (العسل، المكسرات بالعسل، خلطات العسل)؛ والمنتجات التي فُتح غلافها أو ختمها بعد التسليم ولا يصح إرجاعها لأسباب صحية (العطر الذي فُتح شريط حمايته). تبقى حقوق المشتري القانونية محفوظة إذا وصل المنتج تالفًا أو خاطئًا.",
+        "خارج حق الانسحاب (إلا إذا وصل تالفًا أو خاطئًا)",
+        "يمكن تقديم الشكاوى والاعتراضات إلى هيئة التحكيم الاستهلاكي أو محكمة المستهلك في مكان إقامة المشتري، ضمن الحدود المالية التي تحددها وزارة التجارة سنويًا.",
+        "التاريخ",
+        "يُرسل رقم الطلب في رسالة التأكيد.",
+        [
+            "الطرفان: أُبرم هذا العقد بين البائع والمشتري المذكورة بياناتهما أعلاه، بناءً على الطلب الذي قدّمه المشتري إلكترونيًا عبر الموقع.",
+            "الموضوع: موضوع العقد بيع المنتجات المذكورة أدناه بصفاتها وأسعارها وتسليمها، ويخضع الطرفان لأحكام قانون حماية المستهلك رقم 6502 ولائحة العقود عن بعد.",
+            "المعلومات المسبقة: يقر المشتري بأنه قرأ نموذج المعلومات المسبقة ووافق عليه إلكترونيًا قبل تأكيد طلبه.",
+            "التسليم: تُسلّم المنتجات خلال المدة القانونية البالغة 30 يومًا من تأكيد الطلب، وتكلفة الشحن مبيّنة أعلاه.",
+            "سلامة المنتج: رقم الدفعة وتاريخ انتهاء الصلاحية للمنتجات الغذائية مبيّنان على الملصق وفي صفحة المنتج. لا يُعطى العسل للأطفال دون عمر السنة.",
+            "حق الانسحاب واستثناءاته كما وردت في نموذج المعلومات المسبقة.",
+            "النزاعات: تختص هيئات التحكيم الاستهلاكي ومحاكم المستهلك بالنظر في النزاعات.",
+        ]);
+
+    private static readonly Texts English = new(
+        "ltr",
+        "Pre-Contractual Information Form",
+        "Distance Sales Contract",
+        "DRAFT — pending legal review",
+        "Seller", "Buyer", "Name / title", "Address", "Phone", "E-mail", "Tax office / number", "MERSIS no", "ETBİS registration no", "KEP address",
+        "Delivery address", "Invoice address",
+        "Products under this contract", "Product", "Qty", "Unit price", "Discount", "Amount", "VAT",
+        "Subtotal", "Shipping", "Cash-on-delivery fee", "Total", "All prices include VAT.",
+        "Payment method", "Credit / debit card (3D Secure, with instalment options)", "Cash on delivery",
+        "Products are handed to the carrier within 30 days of order confirmation at the latest, usually within one business day, and delivered to the address above.",
+        "Right of withdrawal",
+        "The buyer may withdraw from the contract within 14 days of delivery to them or to a person they name, without giving any reason and without penalty. Notice of withdrawal can be given from your account, the contact form or by e-mail. The seller refunds the amount paid within 14 days of receiving the notice.",
+        "Under Article 15 of the Distance Contracts Regulation, the right of withdrawal does not apply to: goods that deteriorate quickly or may pass their expiry date (honey, nuts in honey, honey blends); goods whose protective packaging, band or seal has been opened after delivery and which cannot be returned for health and hygiene reasons (a perfume whose protective seal is broken). The buyer's statutory rights remain if a product arrives damaged or wrong.",
+        "Excluded from withdrawal (unless it arrives damaged or wrong)",
+        "Complaints may be filed with the Consumer Arbitration Committee or the Consumer Court of the buyer's place of residence, within the monetary limits set yearly by the Ministry of Trade.",
+        "Date",
+        "The order number is sent in the confirmation e-mail.",
+        [
+            "Parties: This contract is concluded between the Seller and the Buyer identified above, on the order the Buyer placed electronically on the website.",
+            "Subject: The sale and delivery of the products listed below with their characteristics and prices; the parties are subject to Consumer Protection Law No. 6502 and the Distance Contracts Regulation.",
+            "Pre-contractual information: The Buyer confirms having read and electronically accepted the pre-contractual information form before confirming the order.",
+            "Delivery: Products are delivered within the legal period of 30 days from order confirmation. The shipping cost is shown above.",
+            "Product safety: Batch numbers and best-before dates of food products are on the label and the product page. Honey must not be given to infants under 12 months.",
+            "The right of withdrawal and its exceptions are as stated in the pre-contractual information form.",
+            "Disputes: Consumer Arbitration Committees and Consumer Courts have jurisdiction.",
+        ]);
+}

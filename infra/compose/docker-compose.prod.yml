@@ -1,0 +1,103 @@
+# Production on one VPS (devops.md §2): Caddy (automatic HTTPS) → web ×2, api ×2; one worker; Redis; Meilisearch.
+# PostgreSQL is managed (or on its own host with pgBackRest); objects live in Cloudflare R2. Nothing here stores money data.
+#   IMAGE_TAG=<git sha> docker compose -f infra/compose/docker-compose.prod.yml --env-file /etc/rahiq/prod.env up -d
+# Deploy and rollback: infra/scripts/deploy.sh. Migrations run as a one-off job before new API containers start.
+name: rahiq-prod
+
+x-api: &api
+  image: ${REGISTRY:-ghcr.io/rahiq}/rahiq-api:${IMAGE_TAG:?set IMAGE_TAG}
+  restart: unless-stopped
+  env_file: ${RAHIQ_ENV_FILE:-/etc/rahiq/prod.env}
+  environment:
+    ConnectionStrings__Redis: redis:6379
+    Search__MeilisearchUrl: http://meilisearch:7700
+    Web__RevalidateUrl: http://web:3000/api/revalidate
+    Database__MigrateOnStartup: "false"
+  volumes: [api-keys:/app/App_Data/keys]
+  depends_on:
+    redis: { condition: service_healthy }
+    meilisearch: { condition: service_healthy }
+
+services:
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports: ["80:80", "443:443", "443:443/udp"]
+    environment:
+      SITE_DOMAIN: ${SITE_DOMAIN:?set SITE_DOMAIN}
+      API_DOMAIN: ${API_DOMAIN:?set API_DOMAIN}
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on: [web, api]
+
+  web:
+    image: ${REGISTRY:-ghcr.io/rahiq}/rahiq-web:${IMAGE_TAG:?set IMAGE_TAG}
+    restart: unless-stopped
+    env_file: ${RAHIQ_WEB_ENV_FILE:-/etc/rahiq/web.env}
+    environment:
+      API_INTERNAL_URL: http://api:8080
+    deploy: { replicas: 2 }
+
+  # HTTP only: background work is off here so a rolling restart never interrupts it.
+  api:
+    <<: *api
+    environment:
+      ConnectionStrings__Redis: redis:6379
+      Search__MeilisearchUrl: http://meilisearch:7700
+      Web__RevalidateUrl: http://web:3000/api/revalidate
+      Database__MigrateOnStartup: "false"
+      Workers__Enabled: "false"
+    deploy: { replicas: 2 }
+
+  # Outbox, reservation expiry, reconciliation and alerts. Recurring jobs take a pg advisory lock, so a second copy is harmless.
+  worker:
+    <<: *api
+    environment:
+      ConnectionStrings__Redis: redis:6379
+      Search__MeilisearchUrl: http://meilisearch:7700
+      Web__RevalidateUrl: http://web:3000/api/revalidate
+      Database__MigrateOnStartup: "false"
+      Workers__Enabled: "true"
+      ASPNETCORE_URLS: http://+:8081
+
+  # One-off: `docker compose ... run --rm migrate` (deploy.sh does this before rolling the API).
+  migrate:
+    <<: *api
+    restart: "no"
+    command: ["migrate"]
+    profiles: [jobs]
+    depends_on: []
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory", "256mb", "--maxmemory-policy", "allkeys-lru"]
+    volumes: [redis-data:/data]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.15
+    restart: unless-stopped
+    environment:
+      MEILI_ENV: production
+      MEILI_NO_ANALYTICS: "true"
+      MEILI_MASTER_KEY: ${MEILI_MASTER_KEY:?set MEILI_MASTER_KEY}
+    volumes: [meili-data:/meili_data]
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:7700/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  caddy-data:
+  caddy-config:
+  api-keys:
+  redis-data:
+  meili-data:

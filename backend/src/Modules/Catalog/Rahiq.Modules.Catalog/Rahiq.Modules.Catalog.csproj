@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="SkiaSharp" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" />
+    <PackageReference Include="MeiliSearch" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\Rahiq.Infrastructure.Common\Rahiq.Infrastructure.Common.csproj" />
+    <ProjectReference Include="..\Rahiq.Modules.Catalog.Contracts\Rahiq.Modules.Catalog.Contracts.csproj" />
+    <ProjectReference Include="..\..\Inventory\Rahiq.Modules.Inventory.Contracts\Rahiq.Modules.Inventory.Contracts.csproj" />
+    <ProjectReference Include="..\..\Pricing\Rahiq.Modules.Pricing.Contracts\Rahiq.Modules.Pricing.Contracts.csproj" />
+    <ProjectReference Include="..\..\Notifications\Rahiq.Modules.Notifications.Contracts\Rahiq.Modules.Notifications.Contracts.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Rahiq.Domain.Tests" />
+    <InternalsVisibleTo Include="Rahiq.CommerceTests" />
+    <InternalsVisibleTo Include="Rahiq.IntegrationTests" />
+    <InternalsVisibleTo Include="Rahiq.Testing" />
+    <InternalsVisibleTo Include="Rahiq.Api" />
+  </ItemGroup>
+</Project>

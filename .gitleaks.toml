@@ -1,0 +1,11 @@
+# Development-only credentials in the local compose file are intentionally public.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Local development defaults"
+paths = [
+  '''infra/compose/\.env\.example''',
+  '''infra/compose/docker-compose\.yml''',
+  '''backend/src/Rahiq\.Api/appsettings\.Development\.json''',
+]

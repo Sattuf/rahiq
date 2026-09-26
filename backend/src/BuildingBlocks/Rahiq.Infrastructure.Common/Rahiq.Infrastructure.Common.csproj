@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Npgsql" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+    <PackageReference Include="EFCore.NamingConventions" />
+    <PackageReference Include="Dapper" />
+    <PackageReference Include="FluentValidation" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+    <PackageReference Include="AWSSDK.S3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Rahiq.Application.Abstractions\Rahiq.Application.Abstractions.csproj" />
+  </ItemGroup>
+</Project>

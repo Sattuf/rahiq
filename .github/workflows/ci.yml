@@ -1,0 +1,196 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  DOTNET_NOLOGO: "1"
+  DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+  PG_CONN: Host=localhost;Port=5432;Username=rahiq;Password=rahiq_ci;Database=postgres
+
+jobs:
+  backend:
+    name: Backend (.NET)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: rahiq
+          POSTGRES_PASSWORD: rahiq_ci
+        ports: ["5432:5432"]
+        options: >-
+          --name pg --health-cmd "pg_isready -U rahiq" --health-interval 5s --health-timeout 3s --health-retries 20
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: backend/global.json
+      # Each test class gets its own database; the suites run in parallel and need more than the default 100 connections.
+      - name: Raise max_connections
+        run: |
+          docker exec pg psql -U rahiq -c "ALTER SYSTEM SET max_connections = 300"
+          docker restart pg
+          until docker exec pg pg_isready -U rahiq; do sleep 1; done
+      - run: dotnet restore Rahiq.sln
+      - name: Format
+        run: dotnet format Rahiq.sln --verify-no-changes --no-restore
+      - name: Build
+        run: dotnet build Rahiq.sln --no-restore -c Release
+      - name: Unit and architecture tests
+        run: dotnet test Rahiq.sln --no-build -c Release --filter "FullyQualifiedName~Rahiq.Domain.Tests|FullyQualifiedName~Rahiq.ArchitectureTests" --logger trx
+      # testing.md §2: the twelve commerce scenarios gate every merge. Real PostgreSQL, no mocks of the database.
+      - name: Commerce suite and API integration tests
+        env:
+          RAHIQ_TEST_POSTGRES: ${{ env.PG_CONN }}
+        run: dotnet test Rahiq.sln --no-build -c Release --filter "FullyQualifiedName~Rahiq.CommerceTests|FullyQualifiedName~Rahiq.IntegrationTests" --logger trx --collect:"XPlat Code Coverage"
+      - name: Vulnerable packages
+        run: |
+          dotnet list Rahiq.sln package --vulnerable --include-transitive 2>&1 | tee vuln.txt
+          ! grep -qE "(High|Critical)" vuln.txt
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: backend-test-results
+          path: backend/**/TestResults/**
+
+  frontend:
+    name: Frontend (Next.js)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: frontend/package.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - name: Unit tests (i18n parity and plurals, formatting, palette contrast)
+        run: pnpm --filter @rahiq/web test
+      - run: pnpm build
+      - name: Dependency audit
+        run: pnpm audit --audit-level high --prod
+
+  e2e:
+    name: Journeys (Playwright) + budgets
+    runs-on: ubuntu-latest
+    needs: [backend, frontend]
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: rahiq
+          POSTGRES_PASSWORD: rahiq_ci
+          POSTGRES_DB: rahiq
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U rahiq" --health-interval 5s --health-timeout 3s --health-retries 20
+    env:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__Postgres: Host=localhost;Port=5432;Username=rahiq;Password=rahiq_ci;Database=rahiq
+      Email__Transport: log
+      SESSION_SECRET: ci-session-secret-0123456789abcdef0123456789
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+      NEXT_PUBLIC_MEDIA_ORIGIN: http://localhost:5080
+      NEXT_PUBLIC_API_ORIGIN: http://localhost:5080
+      API_INTERNAL_URL: http://localhost:5080
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: backend/global.json
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: frontend/package.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - name: Build and start the API (migrate + demo seed)
+        working-directory: backend
+        run: |
+          dotnet publish src/Rahiq.Api -c Release -o ../out/api
+          dotnet ../out/api/Rahiq.Api.dll migrate
+          dotnet ../out/api/Rahiq.Api.dll seed
+          nohup dotnet ../out/api/Rahiq.Api.dll --urls http://localhost:5080 > ../api.log 2>&1 &
+          timeout 60 bash -c 'until curl -fsS http://localhost:5080/health/ready; do sleep 1; done'
+      - name: Build and start the web
+        working-directory: frontend
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
+          nohup pnpm --filter @rahiq/web start --port 3000 > ../web.log 2>&1 &
+          timeout 60 bash -c 'until curl -fsS http://localhost:3000/robots.txt; do sleep 1; done'
+      - name: Playwright
+        working-directory: frontend/apps/web
+        env:
+          CI: "1"
+        run: |
+          pnpm exec playwright install --with-deps chromium
+          pnpm exec playwright test
+      - name: First-load JS budget (ADR-018)
+        working-directory: frontend/apps/web
+        run: node scripts/bundle-budget.mjs
+      - name: Lighthouse CI
+        working-directory: frontend/apps/web
+        run: pnpm dlx @lhci/cli@0.15.x autorun
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-report
+          path: |
+            frontend/apps/web/playwright-report
+            frontend/apps/web/test-results
+            frontend/apps/web/lighthouse-results
+            api.log
+            web.log
+
+  infra:
+    name: Compose config
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose -f infra/compose/docker-compose.yml config --quiet
+      - name: Production compose
+        env:
+          IMAGE_TAG: ci
+          SITE_DOMAIN: rahiq.example
+          API_DOMAIN: api.rahiq.example
+          MEILI_MASTER_KEY: ci
+          RAHIQ_ENV_FILE: prod.env.example
+          RAHIQ_WEB_ENV_FILE: web.env.example
+        run: docker compose -f infra/compose/docker-compose.prod.yml config --quiet
+      - name: Shell scripts
+        run: shellcheck infra/scripts/*.sh
+
+  secrets:
+    name: Secret scan (gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

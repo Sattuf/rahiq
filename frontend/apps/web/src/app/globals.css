@@ -1,0 +1,554 @@
+@import "tailwindcss";
+
+/*
+ * Rahiq design system (brand-identity.md §5, §10). One brand, two lights (Law 9):
+ * components use only these variables; [data-world] swaps the light, never the components.
+ * Logical properties only (content-seo.md §1): margin-inline, padding-inline, inset-inline, text-align: start.
+ */
+:root {
+  --canvas: #ece9e3;
+  --ink: #2a1f17;
+  --accent: #8a5412;
+  --accent-ink: #ffffff;
+  --muted: #625950;
+  --line: #d4cec5;
+  --paper: #f6f4f0;
+  --danger: #8c2f1f;
+  --ok: #3d5a2a;
+
+  --primary: #2a1f17;
+  --surface: #f6f4f0;
+  --secondary: #6e655c;
+  --caustic-tint: #ffffff;
+  --glow: rgba(255, 255, 255, 0);
+
+  --radius-product: 4px;
+  --radius-control: 10px;
+  --radius-pill: 999px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --fast: 180ms;
+  --base: 420ms;
+  --slow: 900ms;
+
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-text: var(--font-figtree), system-ui, sans-serif;
+}
+
+:lang(ar) {
+  --font-display: var(--font-messiri), var(--font-fraunces), serif;
+  --font-text: var(--font-plex-arabic), var(--font-figtree), system-ui, sans-serif;
+}
+
+[data-world="perfume"] {
+  --primary: #343858;
+  --surface: #d6dee2;
+  --secondary: #a8838c;
+  --caustic-tint: #b9c6f0;
+  --glow: rgba(185, 198, 240, 0.35);
+  --oud: #4e3325;
+}
+
+[data-world="honey"] {
+  --primary: #c07e24;
+  --primary-ink: #5a3a0e;
+  --surface: #f1eadb;
+  --secondary: #5b6636;
+  --caustic-tint: #ffc766;
+  --glow: rgba(255, 199, 102, 0.45);
+  --pollen: #e6c35c;
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-ink: var(--ink);
+  --color-accent: var(--accent);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-paper: var(--paper);
+  --color-primary: var(--primary);
+  --color-surface: var(--surface);
+  --color-secondary: var(--secondary);
+  --color-danger: var(--danger);
+  --font-display: var(--font-display);
+  --font-text: var(--font-text);
+}
+
+html {
+  background: var(--canvas);
+  color: var(--ink);
+  -webkit-text-size-adjust: 100%;
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: 1rem;
+  line-height: 1.6;
+  background: var(--canvas);
+  color: var(--ink);
+  overflow-x: clip;
+  text-rendering: optimizeLegibility;
+}
+
+:lang(ar) body,
+[lang="ar"] {
+  line-height: 1.8; /* brand-identity.md §6 */
+  letter-spacing: 0 !important; /* Never letter-space Arabic. */
+}
+
+h1,
+h2,
+h3,
+.display {
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: 1.15;
+  margin: 0;
+}
+
+:lang(ar) h1,
+:lang(ar) h2,
+:lang(ar) h3,
+:lang(ar) .display {
+  line-height: 1.45;
+}
+
+h1 {
+  font-size: clamp(2rem, 1.2rem + 3.6vw, 4.2rem);
+}
+
+h2 {
+  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.4rem);
+}
+
+h3 {
+  font-size: 1.2rem;
+}
+
+a {
+  color: inherit;
+  text-underline-offset: 0.2em;
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  inset-inline-start: 1rem;
+  top: -4rem;
+  z-index: 100;
+  background: var(--ink);
+  color: var(--canvas);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-control);
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+.container {
+  width: 100%;
+  max-width: 1240px;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 2.5rem);
+}
+
+.eyebrow {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+:lang(ar) .eyebrow {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 0.9rem;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+/* ── Logo ───────────────────────────────────────── */
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.logo-word {
+  font-family: var(--font-fraunces), serif;
+  font-size: 1.05rem;
+  letter-spacing: 0.22em;
+}
+
+.logo-arabic {
+  font-family: var(--font-messiri), serif;
+  font-size: 1.15rem;
+  letter-spacing: 0;
+  padding-inline-start: 0.55rem;
+  border-inline-start: 1px solid var(--line);
+}
+
+/* ── Controls (targets ≥ 44px, frontend-experience.md §7) ─────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 48px;
+  padding-inline: 1.4rem;
+  border-radius: var(--radius-control);
+  border: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--fast) var(--ease), color var(--fast) var(--ease), transform var(--fast) var(--ease);
+}
+
+.btn:hover {
+  background: var(--ink);
+  color: var(--canvas);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn[disabled],
+.btn[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* The drop: the rare accent, for the one action that buys (brand-identity.md §5). */
+.btn-buy {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  width: 100%;
+}
+
+.btn-buy:hover {
+  background: #6f430e;
+  border-color: #6f430e;
+  color: #fff;
+}
+
+.btn-quiet {
+  border-color: transparent;
+  min-height: 44px;
+  padding-inline: 0.75rem;
+}
+
+.btn-quiet:hover {
+  background: rgba(42, 31, 23, 0.06);
+  color: var(--ink);
+}
+
+.field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.field label {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--radius-control);
+  border: 1px solid #b9b1a6;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+}
+
+.textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-color: var(--accent);
+}
+
+.field-error {
+  color: var(--danger);
+  font-size: 0.88rem;
+}
+
+.check {
+  display: flex;
+  gap: 0.65rem;
+  align-items: flex-start;
+  min-height: 44px;
+  cursor: pointer;
+}
+
+.check input {
+  width: 22px;
+  height: 22px;
+  margin-top: 0.2rem;
+  accent-color: var(--accent);
+  flex: none;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding-inline: 0.9rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.92rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.chip[aria-pressed="true"],
+.chip[aria-current="true"] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--canvas);
+}
+
+.notice {
+  border-radius: var(--radius-control);
+  padding: 0.85rem 1rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+}
+
+.notice-danger {
+  border-color: var(--danger);
+  color: var(--danger);
+  background: #fbf1ee;
+}
+
+.notice-ok {
+  border-color: var(--ok);
+  color: var(--ok);
+  background: #f0f4ea;
+}
+
+/* ── Warnings and allergens: always visible, real text (Law 2, §7) ── */
+.warnings {
+  border-inline-start: 4px solid var(--ink);
+  background: var(--paper);
+  padding: 0.9rem 1rem;
+  border-radius: 0 var(--radius-control) var(--radius-control) 0;
+}
+
+[dir="rtl"] .warnings {
+  border-radius: var(--radius-control) 0 0 var(--radius-control);
+}
+
+.allergen-box {
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-control);
+  padding: 0.9rem 1rem;
+  font-weight: 600;
+}
+
+/* ── Product imagery and the honest placeholder (Law 8) ──────────── */
+.product-frame {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-product);
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: color-mix(in srgb, var(--primary) 55%, transparent);
+  background:
+    radial-gradient(120% 80% at 30% 20%, var(--glow), transparent 60%),
+    linear-gradient(180deg, color-mix(in srgb, var(--surface) 85%, white), var(--surface));
+}
+
+.placeholder svg {
+  width: 38%;
+  height: auto;
+}
+
+.placeholder-note {
+  position: absolute;
+  inset-inline: 0.75rem;
+  bottom: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* ── Caustic light layers ─────────────────────────── */
+.caustics {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.caustics-fallback {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 40% at 25% 30%, var(--glow), transparent 70%),
+    radial-gradient(40% 30% at 70% 70%, var(--glow), transparent 70%);
+  opacity: 0.8;
+}
+
+/* ── Bars (scales 1–5 with a text label, never colour only) ───────── */
+.scale-bar {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+  height: 8px;
+}
+
+.scale-bar span {
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--primary) 18%, transparent);
+}
+
+.scale-bar span[data-on="true"] {
+  background: var(--primary);
+}
+
+[data-world="honey"] .scale-bar span[data-on="true"] {
+  background: var(--primary-ink);
+}
+
+.composition-bar {
+  display: flex;
+  height: 16px;
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+
+/* ── Cards and grids ─────────────────────────────── */
+.grid-products {
+  display: grid;
+  gap: clamp(1rem, 2.5vw, 2rem);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr));
+}
+
+.card-link {
+  display: grid;
+  gap: 0.7rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.card-link:hover .product-frame {
+  box-shadow: 0 18px 40px -24px color-mix(in srgb, var(--primary) 70%, transparent);
+}
+
+.price {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.price-old {
+  text-decoration: line-through;
+  color: var(--muted);
+  font-weight: 400;
+  margin-inline-start: 0.5rem;
+}
+
+.section {
+  padding-block: clamp(3rem, 8vw, 7rem);
+}
+
+/* ── Drawer ─────────────────────────────────────── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(42, 31, 23, 0.35);
+  z-index: 60;
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  inset-inline-end: 0;
+  width: min(440px, 100vw);
+  background: var(--canvas);
+  z-index: 61;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -20px 0 60px -30px rgba(0, 0, 0, 0.4);
+}
+
+.dialog {
+  position: fixed;
+  inset-inline: max(1rem, calc(50vw - 380px));
+  top: 5vh;
+  bottom: 5vh;
+  background: #fff;
+  z-index: 61;
+  border-radius: var(--radius-control);
+  overflow: auto;
+  padding: 1.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

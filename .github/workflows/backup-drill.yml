@@ -1,0 +1,37 @@
+name: Monthly restore drill
+
+# devops.md §5: a backup is only real once it has been restored. Restores last night's dump into a throwaway database
+# and checks the money invariants. Failure pages the on-call.
+on:
+  schedule: [{ cron: "0 4 1 * *" }]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  drill:
+    runs-on: ubuntu-latest
+    environment: production-readonly
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env: { POSTGRES_USER: drill, POSTGRES_PASSWORD: drill, POSTGRES_DB: rahiq_restore }
+        ports: ["5432:5432"]
+        options: --health-cmd "pg_isready -U drill" --health-interval 5s --health-retries 20
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y age postgresql-client
+      - name: Restore latest backup
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.BACKUP_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.BACKUP_SECRET_KEY }}
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          PGURL: postgres://drill:drill@localhost:5432/rahiq_restore
+        run: |
+          echo "${{ secrets.BACKUP_AGE_KEY }}" > key.txt
+          latest=$(aws s3 ls "${{ vars.BACKUP_BUCKET }}/daily/" --endpoint-url "$R2_ENDPOINT" | sort | tail -1 | awk '{print $4}')
+          AGE_KEY=key.txt infra/scripts/restore.sh "${{ vars.BACKUP_BUCKET }}/daily/$latest" | tee drill.txt
+          rm key.txt
+          grep -q "orders violating the total equation|0" drill.txt
+          grep -q "stock rows over-reserved|0" drill.txt

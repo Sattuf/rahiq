@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\Rahiq.Infrastructure.Common\Rahiq.Infrastructure.Common.csproj" />
+    <ProjectReference Include="..\Rahiq.Modules.Customers.Contracts\Rahiq.Modules.Customers.Contracts.csproj" />
+    <ProjectReference Include="..\..\Cart\Rahiq.Modules.Cart.Contracts\Rahiq.Modules.Cart.Contracts.csproj" />
+    <ProjectReference Include="..\..\Ordering\Rahiq.Modules.Ordering.Contracts\Rahiq.Modules.Ordering.Contracts.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Rahiq.Domain.Tests" />
+    <InternalsVisibleTo Include="Rahiq.CommerceTests" />
+    <InternalsVisibleTo Include="Rahiq.IntegrationTests" />
+    <InternalsVisibleTo Include="Rahiq.Testing" />
+    <InternalsVisibleTo Include="Rahiq.Api" />
+  </ItemGroup>
+</Project>

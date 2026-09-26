@@ -1,0 +1,816 @@
+{
+  "_comment": "القواميس الأولية للمتجر بثلاث لغات. النصوص القانونية (التحذيرات) مسودات تُراجع مع المحامي قبل النشر. الأسماء التركية للعسل والنوتات تُراجع بمتحدث أصلي.",
+  "schemaVersion": 1,
+  "locales": [
+    "ar",
+    "tr",
+    "en"
+  ],
+  "sections": [
+    {
+      "code": "perfume",
+      "name": {
+        "ar": "العطور",
+        "tr": "Parfüm",
+        "en": "Perfume"
+      },
+      "light": "evening"
+    },
+    {
+      "code": "honey",
+      "name": {
+        "ar": "العسل",
+        "tr": "Bal",
+        "en": "Honey"
+      },
+      "light": "morning"
+    },
+    {
+      "code": "shared",
+      "name": {
+        "ar": "الهدايا",
+        "tr": "Hediyeler",
+        "en": "Gifts"
+      },
+      "light": "both"
+    }
+  ],
+  "productTypes": [
+    {
+      "code": "perfume",
+      "section": "perfume",
+      "name": {
+        "ar": "عطر",
+        "tr": "Parfüm",
+        "en": "Fragrance"
+      }
+    },
+    {
+      "code": "attar",
+      "section": "perfume",
+      "name": {
+        "ar": "دهن عطر",
+        "tr": "Esans yağı",
+        "en": "Perfume Oil (Attar)"
+      }
+    },
+    {
+      "code": "hair_home_mist",
+      "section": "perfume",
+      "name": {
+        "ar": "عطر شعر ومفارش",
+        "tr": "Saç ve ev spreyi",
+        "en": "Hair & Home Mist"
+      }
+    },
+    {
+      "code": "discovery_set",
+      "section": "perfume",
+      "name": {
+        "ar": "مجموعة اكتشاف",
+        "tr": "Keşif seti",
+        "en": "Discovery Set"
+      }
+    },
+    {
+      "code": "honey",
+      "section": "honey",
+      "name": {
+        "ar": "عسل خام",
+        "tr": "Süzme bal",
+        "en": "Raw Honey"
+      }
+    },
+    {
+      "code": "comb_honey",
+      "section": "honey",
+      "name": {
+        "ar": "عسل بالشمع",
+        "tr": "Petek bal",
+        "en": "Comb Honey"
+      }
+    },
+    {
+      "code": "nuts_in_honey",
+      "section": "honey",
+      "name": {
+        "ar": "مكسرات بالعسل",
+        "tr": "Ballı kuruyemiş",
+        "en": "Nuts in Honey"
+      }
+    },
+    {
+      "code": "honey_blend",
+      "section": "honey",
+      "name": {
+        "ar": "خلطة عسل",
+        "tr": "Ballı karışım",
+        "en": "Honey Blend"
+      }
+    },
+    {
+      "code": "gift_box",
+      "section": "shared",
+      "name": {
+        "ar": "صندوق هدايا",
+        "tr": "Hediye kutusu",
+        "en": "Gift Box"
+      }
+    },
+    {
+      "code": "bundle",
+      "section": "shared",
+      "name": {
+        "ar": "باقة",
+        "tr": "Paket",
+        "en": "Bundle"
+      }
+    }
+  ],
+  "perfume": {
+    "concentrations": [
+      {
+        "code": "extrait",
+        "name": {
+          "ar": "خلاصة عطر",
+          "tr": "Extrait de Parfum",
+          "en": "Extrait de Parfum"
+        }
+      },
+      {
+        "code": "edp",
+        "name": {
+          "ar": "ماء عطر",
+          "tr": "Eau de Parfum",
+          "en": "Eau de Parfum"
+        }
+      },
+      {
+        "code": "edt",
+        "name": {
+          "ar": "ماء تواليت",
+          "tr": "Eau de Toilette",
+          "en": "Eau de Toilette"
+        }
+      },
+      {
+        "code": "edc",
+        "name": {
+          "ar": "ماء كولونيا",
+          "tr": "Eau de Cologne",
+          "en": "Eau de Cologne"
+        }
+      },
+      {
+        "code": "oil",
+        "name": {
+          "ar": "دهن عطر",
+          "tr": "Esans yağı",
+          "en": "Perfume Oil"
+        }
+      }
+    ],
+    "families": [
+      {
+        "code": "oriental",
+        "name": {
+          "ar": "شرقي",
+          "tr": "Oryantal",
+          "en": "Oriental / Amber"
+        }
+      },
+      {
+        "code": "woody",
+        "name": {
+          "ar": "خشبي",
+          "tr": "Odunsu",
+          "en": "Woody"
+        }
+      },
+      {
+        "code": "floral",
+        "name": {
+          "ar": "زهري",
+          "tr": "Çiçeksi",
+          "en": "Floral"
+        }
+      },
+      {
+        "code": "fresh",
+        "name": {
+          "ar": "منعش",
+          "tr": "Ferah",
+          "en": "Fresh / Citrus"
+        }
+      },
+      {
+        "code": "oud",
+        "name": {
+          "ar": "عودي",
+          "tr": "Ud",
+          "en": "Oud"
+        }
+      },
+      {
+        "code": "gourmand",
+        "name": {
+          "ar": "حلو",
+          "tr": "Gurme",
+          "en": "Gourmand"
+        }
+      },
+      {
+        "code": "aromatic",
+        "name": {
+          "ar": "عشبي",
+          "tr": "Aromatik",
+          "en": "Aromatic"
+        }
+      },
+      {
+        "code": "musky",
+        "name": {
+          "ar": "مسكي",
+          "tr": "Misk",
+          "en": "Musky"
+        }
+      }
+    ],
+    "genders": [
+      {
+        "code": "feminine",
+        "name": {
+          "ar": "نسائي",
+          "tr": "Kadın",
+          "en": "Feminine"
+        }
+      },
+      {
+        "code": "masculine",
+        "name": {
+          "ar": "رجالي",
+          "tr": "Erkek",
+          "en": "Masculine"
+        }
+      },
+      {
+        "code": "unisex",
+        "name": {
+          "ar": "للجنسين",
+          "tr": "Unisex",
+          "en": "Unisex"
+        }
+      }
+    ],
+    "seasons": [
+      {
+        "code": "spring",
+        "name": {
+          "ar": "ربيع",
+          "tr": "İlkbahar",
+          "en": "Spring"
+        }
+      },
+      {
+        "code": "summer",
+        "name": {
+          "ar": "صيف",
+          "tr": "Yaz",
+          "en": "Summer"
+        }
+      },
+      {
+        "code": "autumn",
+        "name": {
+          "ar": "خريف",
+          "tr": "Sonbahar",
+          "en": "Autumn"
+        }
+      },
+      {
+        "code": "winter",
+        "name": {
+          "ar": "شتاء",
+          "tr": "Kış",
+          "en": "Winter"
+        }
+      }
+    ],
+    "notes": [
+      {
+        "id": "bergamot",
+        "family": "fresh",
+        "name": {
+          "ar": "برغموت",
+          "tr": "Bergamot",
+          "en": "Bergamot"
+        }
+      },
+      {
+        "id": "lemon",
+        "family": "fresh",
+        "name": {
+          "ar": "ليمون",
+          "tr": "Limon",
+          "en": "Lemon"
+        }
+      },
+      {
+        "id": "mandarin",
+        "family": "fresh",
+        "name": {
+          "ar": "يوسفي",
+          "tr": "Mandalina",
+          "en": "Mandarin"
+        }
+      },
+      {
+        "id": "pink-pepper",
+        "family": "aromatic",
+        "name": {
+          "ar": "فلفل وردي",
+          "tr": "Pembe biber",
+          "en": "Pink Pepper"
+        }
+      },
+      {
+        "id": "cardamom",
+        "family": "aromatic",
+        "name": {
+          "ar": "هيل",
+          "tr": "Kakule",
+          "en": "Cardamom"
+        }
+      },
+      {
+        "id": "saffron",
+        "family": "oriental",
+        "name": {
+          "ar": "زعفران",
+          "tr": "Safran",
+          "en": "Saffron"
+        }
+      },
+      {
+        "id": "lavender",
+        "family": "aromatic",
+        "name": {
+          "ar": "خزامى",
+          "tr": "Lavanta",
+          "en": "Lavender"
+        }
+      },
+      {
+        "id": "taif-rose",
+        "family": "floral",
+        "name": {
+          "ar": "ورد طائفي",
+          "tr": "Taif gülü",
+          "en": "Taif Rose"
+        }
+      },
+      {
+        "id": "damask-rose",
+        "family": "floral",
+        "name": {
+          "ar": "ورد دمشقي",
+          "tr": "Isparta gülü",
+          "en": "Damask Rose"
+        }
+      },
+      {
+        "id": "jasmine",
+        "family": "floral",
+        "name": {
+          "ar": "ياسمين",
+          "tr": "Yasemin",
+          "en": "Jasmine"
+        }
+      },
+      {
+        "id": "orange-blossom",
+        "family": "floral",
+        "name": {
+          "ar": "زهر البرتقال",
+          "tr": "Portakal çiçeği",
+          "en": "Orange Blossom"
+        }
+      },
+      {
+        "id": "iris",
+        "family": "floral",
+        "name": {
+          "ar": "سوسن",
+          "tr": "İris",
+          "en": "Iris"
+        }
+      },
+      {
+        "id": "oud",
+        "family": "oud",
+        "name": {
+          "ar": "عود",
+          "tr": "Ud",
+          "en": "Oud"
+        }
+      },
+      {
+        "id": "sandalwood",
+        "family": "woody",
+        "name": {
+          "ar": "صندل",
+          "tr": "Sandal ağacı",
+          "en": "Sandalwood"
+        }
+      },
+      {
+        "id": "cedar",
+        "family": "woody",
+        "name": {
+          "ar": "أرز",
+          "tr": "Sedir",
+          "en": "Cedarwood"
+        }
+      },
+      {
+        "id": "vetiver",
+        "family": "woody",
+        "name": {
+          "ar": "فيتيفر",
+          "tr": "Vetiver",
+          "en": "Vetiver"
+        }
+      },
+      {
+        "id": "patchouli",
+        "family": "woody",
+        "name": {
+          "ar": "باتشولي",
+          "tr": "Paçuli",
+          "en": "Patchouli"
+        }
+      },
+      {
+        "id": "amber",
+        "family": "oriental",
+        "name": {
+          "ar": "عنبر",
+          "tr": "Amber",
+          "en": "Amber"
+        }
+      },
+      {
+        "id": "incense",
+        "family": "oriental",
+        "name": {
+          "ar": "بخور ولبان",
+          "tr": "Tütsü ve günlük",
+          "en": "Incense / Frankincense"
+        }
+      },
+      {
+        "id": "vanilla",
+        "family": "gourmand",
+        "name": {
+          "ar": "فانيليا",
+          "tr": "Vanilya",
+          "en": "Vanilla"
+        }
+      },
+      {
+        "id": "tonka",
+        "family": "gourmand",
+        "name": {
+          "ar": "تونكا",
+          "tr": "Tonka",
+          "en": "Tonka Bean"
+        }
+      },
+      {
+        "id": "honey-note",
+        "family": "gourmand",
+        "name": {
+          "ar": "عسل",
+          "tr": "Bal",
+          "en": "Honey"
+        }
+      },
+      {
+        "id": "leather",
+        "family": "woody",
+        "name": {
+          "ar": "جلد",
+          "tr": "Deri",
+          "en": "Leather"
+        }
+      },
+      {
+        "id": "white-musk",
+        "family": "musky",
+        "name": {
+          "ar": "مسك أبيض",
+          "tr": "Beyaz misk",
+          "en": "White Musk"
+        }
+      }
+    ]
+  },
+  "honey": {
+    "floralSources": [
+      {
+        "code": "multifloral",
+        "name": {
+          "ar": "عسل زهور",
+          "tr": "Çiçek balı",
+          "en": "Wildflower"
+        }
+      },
+      {
+        "code": "chestnut",
+        "name": {
+          "ar": "عسل كستناء",
+          "tr": "Kestane balı",
+          "en": "Chestnut"
+        }
+      },
+      {
+        "code": "pine",
+        "name": {
+          "ar": "عسل صنوبر",
+          "tr": "Çam balı",
+          "en": "Pine"
+        }
+      },
+      {
+        "code": "thyme",
+        "name": {
+          "ar": "عسل زعتر",
+          "tr": "Kekik balı",
+          "en": "Thyme"
+        }
+      },
+      {
+        "code": "acacia",
+        "name": {
+          "ar": "عسل أكاسيا",
+          "tr": "Akasya balı",
+          "en": "Acacia"
+        }
+      },
+      {
+        "code": "citrus",
+        "name": {
+          "ar": "عسل حمضيات",
+          "tr": "Narenciye balı",
+          "en": "Citrus Blossom"
+        }
+      },
+      {
+        "code": "heather",
+        "name": {
+          "ar": "عسل خلنج",
+          "tr": "Püren balı",
+          "en": "Heather"
+        }
+      },
+      {
+        "code": "sidr",
+        "name": {
+          "ar": "عسل سدر",
+          "tr": "Sidr balı",
+          "en": "Sidr"
+        }
+      },
+      {
+        "code": "highland",
+        "name": {
+          "ar": "عسل جبلي",
+          "tr": "Yayla balı",
+          "en": "Highland"
+        }
+      }
+    ],
+    "textures": [
+      {
+        "code": "liquid",
+        "name": {
+          "ar": "سائل",
+          "tr": "Akışkan",
+          "en": "Liquid"
+        }
+      },
+      {
+        "code": "creamy",
+        "name": {
+          "ar": "كريمي",
+          "tr": "Kremsi",
+          "en": "Creamy"
+        }
+      },
+      {
+        "code": "crystallized",
+        "name": {
+          "ar": "متبلور",
+          "tr": "Kristalize",
+          "en": "Crystallized"
+        }
+      }
+    ],
+    "crystallizationNote": {
+      "ar": "تبلور العسل ظاهرة طبيعية تعتمد على نوعه ودرجة الحرارة، ولا تعني أنه مغشوش. لإعادته سائلًا: ضع البرطمان في ماء دافئ لا يتجاوز 40 درجة.",
+      "tr": "Balın kristalleşmesi, türüne ve sıcaklığa bağlı doğal bir süreçtir; sahte olduğu anlamına gelmez. Akışkan hale getirmek için kavanozu 40°C'yi geçmeyen ılık suya koyun.",
+      "en": "Crystallization is a natural process that depends on the honey type and temperature, and it does not mean the honey is fake. To liquefy, place the jar in warm water no hotter than 40°C."
+    }
+  },
+  "allergens": [
+    {
+      "code": "tree-nuts",
+      "name": {
+        "ar": "مكسرات شجرية",
+        "tr": "Sert kabuklu meyveler",
+        "en": "Tree nuts"
+      }
+    },
+    {
+      "code": "peanuts",
+      "name": {
+        "ar": "فول سوداني",
+        "tr": "Yer fıstığı",
+        "en": "Peanuts"
+      }
+    },
+    {
+      "code": "sesame",
+      "name": {
+        "ar": "سمسم",
+        "tr": "Susam",
+        "en": "Sesame"
+      }
+    },
+    {
+      "code": "milk",
+      "name": {
+        "ar": "حليب",
+        "tr": "Süt",
+        "en": "Milk"
+      }
+    },
+    {
+      "code": "gluten",
+      "name": {
+        "ar": "غلوتين",
+        "tr": "Gluten",
+        "en": "Gluten"
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "code": "honey.infant-under-12-months",
+      "appliesTo": [
+        "honey",
+        "comb_honey",
+        "nuts_in_honey",
+        "honey_blend"
+      ],
+      "text": {
+        "ar": "لا يُعطى للأطفال دون عمر السنة.",
+        "tr": "1 yaşından küçük bebeklere verilmemelidir.",
+        "en": "Not suitable for infants under 12 months."
+      }
+    },
+    {
+      "code": "allergen.contains",
+      "appliesTo": [
+        "nuts_in_honey",
+        "honey_blend"
+      ],
+      "text": {
+        "ar": "يحتوي على: {allergens}.",
+        "tr": "İçerir: {allergens}.",
+        "en": "Contains: {allergens}."
+      }
+    },
+    {
+      "code": "blend.pregnancy-medical",
+      "appliesTo": [
+        "honey_blend"
+      ],
+      "text": {
+        "ar": "للحوامل والمرضعات ومن يتناول أدوية: يُستشار الطبيب قبل التناول.",
+        "tr": "Hamile, emziren veya ilaç kullananlar tüketmeden önce doktora danışmalıdır.",
+        "en": "If pregnant, breastfeeding or taking medication, consult a doctor before use."
+      }
+    },
+    {
+      "code": "honey.sugar-content",
+      "appliesTo": [
+        "honey",
+        "comb_honey",
+        "nuts_in_honey",
+        "honey_blend"
+      ],
+      "text": {
+        "ar": "يحتوي على سكريات طبيعية؛ يُراعى ذلك في الأنظمة الغذائية الخاصة.",
+        "tr": "Doğal şeker içerir; özel diyetlerde dikkate alınmalıdır.",
+        "en": "Contains natural sugars; consider this for special diets."
+      }
+    },
+    {
+      "code": "perfume.flammable",
+      "appliesTo": [
+        "perfume",
+        "hair_home_mist"
+      ],
+      "text": {
+        "ar": "قابل للاشتعال. يُحفظ بعيدًا عن الحرارة واللهب.",
+        "tr": "Yanıcıdır. Isı ve alevden uzak tutunuz.",
+        "en": "Flammable. Keep away from heat and flame."
+      }
+    },
+    {
+      "code": "perfume.external-use",
+      "appliesTo": [
+        "perfume",
+        "attar",
+        "hair_home_mist"
+      ],
+      "text": {
+        "ar": "للاستعمال الخارجي فقط. تجنب ملامسة العينين. يُحفظ بعيدًا عن متناول الأطفال.",
+        "tr": "Haricen kullanılır. Gözle temasından kaçınınız. Çocukların ulaşamayacağı yerde saklayınız.",
+        "en": "For external use only. Avoid contact with eyes. Keep out of reach of children."
+      }
+    }
+  ],
+  "forbiddenClaimTerms": {
+    "_comment": "تُفحص عند حفظ أي محتوى. القائمة تُراجع مع المحامي وتتوسع.",
+    "ar": [
+      "يعالج",
+      "علاج",
+      "يشفي",
+      "شفاء",
+      "دواء",
+      "طبية",
+      "يقوي المناعة",
+      "المناعة",
+      "يقضي على",
+      "مضاد للسرطان",
+      "لمرضى السكري",
+      "يخفض الضغط"
+    ],
+    "tr": [
+      "tedavi",
+      "tedavi eder",
+      "şifa",
+      "şifalı",
+      "iyileştirir",
+      "ilaç",
+      "bağışıklık",
+      "kanser",
+      "diyabet",
+      "tansiyon düşürür"
+    ],
+    "en": [
+      "cure",
+      "cures",
+      "heal",
+      "heals",
+      "treat",
+      "treatment",
+      "remedy",
+      "medicinal",
+      "immune",
+      "immunity",
+      "cancer",
+      "diabetes"
+    ]
+  },
+  "defaultVariants": {
+    "perfume_ml": [
+      2,
+      10,
+      50,
+      100
+    ],
+    "attar_ml": [
+      3,
+      6,
+      12
+    ],
+    "honey_g": [
+      250,
+      500,
+      1000
+    ],
+    "comb_honey_g": [
+      500,
+      1000
+    ],
+    "nuts_in_honey_g": [
+      250,
+      500
+    ]
+  }
+}
+
+

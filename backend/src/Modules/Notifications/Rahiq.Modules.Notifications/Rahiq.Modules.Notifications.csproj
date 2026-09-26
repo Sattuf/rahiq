@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MailKit" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\Rahiq.Infrastructure.Common\Rahiq.Infrastructure.Common.csproj" />
+    <ProjectReference Include="..\Rahiq.Modules.Notifications.Contracts\Rahiq.Modules.Notifications.Contracts.csproj" />
+    <ProjectReference Include="..\..\Catalog\Rahiq.Modules.Catalog.Contracts\Rahiq.Modules.Catalog.Contracts.csproj" />
+    <ProjectReference Include="..\..\Inventory\Rahiq.Modules.Inventory.Contracts\Rahiq.Modules.Inventory.Contracts.csproj" />
+    <ProjectReference Include="..\..\Ordering\Rahiq.Modules.Ordering.Contracts\Rahiq.Modules.Ordering.Contracts.csproj" />
+    <ProjectReference Include="..\..\Payments\Rahiq.Modules.Payments.Contracts\Rahiq.Modules.Payments.Contracts.csproj" />
+    <ProjectReference Include="..\..\Shipping\Rahiq.Modules.Shipping.Contracts\Rahiq.Modules.Shipping.Contracts.csproj" />
+    <ProjectReference Include="..\..\Customers\Rahiq.Modules.Customers.Contracts\Rahiq.Modules.Customers.Contracts.csproj" />
+    <ProjectReference Include="..\..\Documents\Rahiq.Modules.Documents.Contracts\Rahiq.Modules.Documents.Contracts.csproj" />
+    <ProjectReference Include="..\..\Pricing\Rahiq.Modules.Pricing.Contracts\Rahiq.Modules.Pricing.Contracts.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Rahiq.Domain.Tests" />
+    <InternalsVisibleTo Include="Rahiq.CommerceTests" />
+    <InternalsVisibleTo Include="Rahiq.IntegrationTests" />
+    <InternalsVisibleTo Include="Rahiq.Testing" />
+    <InternalsVisibleTo Include="Rahiq.Api" />
+  </ItemGroup>
+</Project>

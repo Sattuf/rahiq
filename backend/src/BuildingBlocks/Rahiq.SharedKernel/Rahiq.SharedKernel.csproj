@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <!-- Single source of truth for dictionaries and forbidden claim terms (rahiq-plan/seed). -->
+    <EmbeddedResource Include="../../../../rahiq-plan/seed/taxonomy.json" LogicalName="Rahiq.taxonomy.json" Link="Compliance/taxonomy.json" />
+  </ItemGroup>
+</Project>

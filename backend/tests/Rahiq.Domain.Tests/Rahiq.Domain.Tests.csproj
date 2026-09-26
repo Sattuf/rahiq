@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="coverlet.collector" />
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/Modules/Catalog/Rahiq.Modules.Catalog/Rahiq.Modules.Catalog.csproj" />
+    <ProjectReference Include="../../src/Modules/Inventory/Rahiq.Modules.Inventory/Rahiq.Modules.Inventory.csproj" />
+    <ProjectReference Include="../../src/Modules/Pricing/Rahiq.Modules.Pricing/Rahiq.Modules.Pricing.csproj" />
+    <ProjectReference Include="../../src/Modules/Cart/Rahiq.Modules.Cart/Rahiq.Modules.Cart.csproj" />
+    <ProjectReference Include="../../src/Modules/Ordering/Rahiq.Modules.Ordering/Rahiq.Modules.Ordering.csproj" />
+    <ProjectReference Include="../../src/Modules/Payments/Rahiq.Modules.Payments/Rahiq.Modules.Payments.csproj" />
+    <ProjectReference Include="../../src/Modules/Shipping/Rahiq.Modules.Shipping/Rahiq.Modules.Shipping.csproj" />
+    <ProjectReference Include="../../src/Modules/Customers/Rahiq.Modules.Customers/Rahiq.Modules.Customers.csproj" />
+    <ProjectReference Include="../../src/Modules/Conversations/Rahiq.Modules.Conversations/Rahiq.Modules.Conversations.csproj" />
+  </ItemGroup>
+</Project>

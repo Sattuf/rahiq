@@ -1,0 +1,86 @@
+# Local development services (architecture.md §3, PLAN.md Phase 0).
+# Usage: docker compose -f infra/compose/docker-compose.yml --env-file infra/compose/.env up -d
+name: rahiq
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-rahiq}
+      POSTGRES_USER: ${POSTGRES_USER:-rahiq}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-rahiq_dev}
+    ports: ["${POSTGRES_PORT:-5432}:5432"]
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    ports: ["${REDIS_PORT:-6379}:6379"]
+    volumes: [redis-data:/data]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.15
+    environment:
+      MEILI_MASTER_KEY: ${MEILI_MASTER_KEY:-rahiq_dev_master_key_change_me}
+      MEILI_ENV: development
+      MEILI_NO_ANALYTICS: "true"
+    ports: ["${MEILI_PORT:-7700}:7700"]
+    volumes: [meili-data:/meili_data]
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:7700/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # Local stand-in for Cloudflare R2 (S3-compatible).
+  minio:
+    image: minio/minio:latest
+    command: ["server", "/data", "--console-address", ":9001"]
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-rahiq}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-rahiq_dev_secret}
+    ports:
+      - "${MINIO_PORT:-9000}:9000"
+      - "${MINIO_CONSOLE_PORT:-9001}:9001"
+    volumes: [minio-data:/data]
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # Catches every e-mail in development (OTP codes, order mails): UI on :8025, SMTP on :1025 (the API default).
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "${MAILPIT_UI_PORT:-8025}:8025"
+      - "${MAILPIT_SMTP_PORT:-1025}:1025"
+
+  seq:
+    image: datalust/seq:latest
+    environment:
+      ACCEPT_EULA: "Y"
+      SEQ_FIRSTRUN_NOAUTHENTICATION: "true"
+    ports:
+      - "${SEQ_UI_PORT:-8081}:80"
+      - "${SEQ_INGEST_PORT:-5341}:5341"
+    volumes: [seq-data:/data]
+
+volumes:
+  postgres-data:
+  redis-data:
+  meili-data:
+  minio-data:
+  seq-data:

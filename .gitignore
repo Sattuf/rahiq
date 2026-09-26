@@ -1,0 +1,30 @@
+# .NET
+bin/
+obj/
+*.user
+.vs/
+TestResults/
+coverage/
+
+# Node
+node_modules/
+.next/
+*.tsbuildinfo
+
+# Env and secrets
+# Runtime data: Data Protection keys, local blobs (invoices with customer data)
+App_Data/
+.env
+.env.*
+!.env.example
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.idea/
+
+# Test and audit output (regenerated; screenshots are ~55 MB)
+test-results/
+playwright-report/
+lighthouse-results/
+.lighthouseci/

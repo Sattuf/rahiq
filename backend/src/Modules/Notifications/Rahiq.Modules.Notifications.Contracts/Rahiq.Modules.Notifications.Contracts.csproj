@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\Rahiq.SharedKernel\Rahiq.SharedKernel.csproj" />
+  </ItemGroup>
+</Project>

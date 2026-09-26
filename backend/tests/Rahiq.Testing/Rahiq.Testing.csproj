@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <!-- Shared fixtures, not a test assembly: keeps `dotnet test Rahiq.sln` from launching a test host for it. -->
+    <IsTestProject>false</IsTestProject>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="xunit" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
+    <PackageReference Include="Testcontainers.PostgreSql" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/Rahiq.Api/Rahiq.Api.csproj" />
+  </ItemGroup>
+</Project>
