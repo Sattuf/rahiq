@@ -107,7 +107,7 @@ internal sealed class NotificationHandlers(
     {
         foreach (var recipient in email.Value.StaffAlertRecipients)
         {
-            await mailer.SendOnceAsync($"alert:{e.EventId}:{recipient}", $"alert:{e.Kind}", null,
+            await mailer.SendOnceAsync($"alert:{e.DedupeKey ?? e.EventId.ToString()}:{recipient}", $"alert:{e.Kind}", null,
                 new EmailMessage(recipient, $"[Rahiq] {e.Subject}", Layout("en", $"<p><strong>{Html.E(e.Kind)}</strong></p><pre style=\"white-space:pre-wrap\">{Html.E(e.Body)}</pre>")), cancellationToken);
         }
     }

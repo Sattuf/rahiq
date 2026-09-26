@@ -18,4 +18,8 @@ public static class AlertKinds
 }
 
 /// <summary>Something staff must look at now (devops.md §4). Any module may raise one.</summary>
-public sealed record StaffAlertRaised(string Kind, string Subject, string Body, string? Reference = null) : DomainEvent;
+/// <param name="DedupeKey">
+/// For recurring checks: alerts with the same key are e-mailed once (e.g. "batch.no_lab_report:2026-09-26"), so a
+/// restart or a second run the same day does not send the same list again. Null means every alert is sent.
+/// </param>
+public sealed record StaffAlertRaised(string Kind, string Subject, string Body, string? Reference = null, string? DedupeKey = null) : DomainEvent;

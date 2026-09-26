@@ -27,7 +27,8 @@ public sealed record WorkerOptions
 public sealed partial class OutboxProcessor(IServiceScopeFactory scopeFactory, IClock clock, ILogger<OutboxProcessor> logger)
 {
     private const int BatchSize = 20;
-    private const int MaxAttempts = 10;
+    private const int MaxAttempts = 20;
+    private const int MaxDelaySeconds = 15 * 60;
 
     /// <returns>The number of messages handled in this pass.</returns>
     public async Task<int> ProcessPendingAsync(CancellationToken cancellationToken = default)
@@ -61,8 +62,16 @@ public sealed partial class OutboxProcessor(IServiceScopeFactory scopeFactory, I
             {
                 message.Attempts++;
                 message.LastError = ex.ToString();
-                message.NextAttemptAt = clock.UtcNow.AddSeconds(Math.Pow(2, message.Attempts));
-                LogFailed(logger, ex, message.Type, message.Id, message.Attempts);
+                // 2, 4, 8 ... seconds, then every 15 minutes: an outage of a few hours loses nothing.
+                message.NextAttemptAt = clock.UtcNow.AddSeconds(Math.Min(Math.Pow(2, message.Attempts), MaxDelaySeconds));
+                if (IsUnreachable(ex))
+                {
+                    LogUnreachable(logger, message.Type, message.Attempts, message.NextAttemptAt.Value, Innermost(ex).Message);
+                }
+                else
+                {
+                    LogFailed(logger, ex, message.Type, message.Id, message.Attempts);
+                }
             }
         }
 
@@ -116,6 +125,25 @@ public sealed partial class OutboxProcessor(IServiceScopeFactory scopeFactory, I
             await tx.CommitAsync(cancellationToken);
         }
     }
+
+    /// <summary>A dependency that is down (mail server, carrier API): expected, retried, not a bug.</summary>
+    private static bool IsUnreachable(Exception ex)
+    {
+        for (var e = ex; e is not null; e = e.InnerException)
+        {
+            if (e is System.Net.Sockets.SocketException or System.Net.Http.HttpRequestException or TimeoutException or IOException)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static Exception Innermost(Exception ex) => ex.InnerException is null ? ex : Innermost(ex.InnerException);
+
+    [LoggerMessage(Level = LogLevel.Warning, Message = "{Type} waits for an unreachable service (attempt {Attempt}, next at {NextAt:HH:mm:ss}): {Reason}")]
+    private static partial void LogUnreachable(ILogger logger, string type, int attempt, DateTimeOffset nextAt, string reason);
 
     [LoggerMessage(Level = LogLevel.Error, Message = "Outbox message {Type} {Id} failed (attempt {Attempt})")]
     private static partial void LogFailed(ILogger logger, Exception ex, string type, Guid id, int attempt);

@@ -276,21 +276,27 @@ internal sealed class InventoryHandlers(
             SELECT id, code, best_before, qty_on_hand - qty_reserved FROM inventory.batches
             WHERE best_before IS NOT NULL AND best_before <= @nearExpiry AND qty_on_hand > qty_reserved
             """, new { nearExpiry }, session.Transaction, cancellationToken: cancellationToken));
-        foreach (var b in expiring)
+        // One digest per kind per day: the job also runs at every start, and a restart must not mail the same list again.
+        var today = clock.Today.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+        var expiringList = expiring.ToList();
+        if (expiringList.Count > 0)
         {
-            events.Publish(new StaffAlertRaised(AlertKinds.BatchNearExpiry, "Batch near expiry",
-                $"Batch {b.Code}: {b.Free} units, best before {b.BestBefore:yyyy-MM-dd}. Consider a bundle or an offer.", b.Id.ToString()));
-            alerts++;
+            events.Publish(new StaffAlertRaised(AlertKinds.BatchNearExpiry, $"{expiringList.Count} batch(es) near expiry",
+                string.Join('\n', expiringList.Select(b => $"Batch {b.Code}: {b.Free} units, best before {b.BestBefore:yyyy-MM-dd}.")) + "\nConsider a bundle or an offer.",
+                DedupeKey: $"{AlertKinds.BatchNearExpiry}:{today}"));
+            alerts += expiringList.Count;
         }
 
         var foodVariantsWithoutReport = await session.Connection.QueryAsync<(Guid Id, string Code)>(new CommandDefinition("""
             SELECT id, code FROM inventory.batches WHERE lab_report_key IS NULL AND best_before IS NOT NULL AND qty_on_hand > 0
             """, transaction: session.Transaction, cancellationToken: cancellationToken));
-        foreach (var b in foodVariantsWithoutReport)
+        var withoutReport = foodVariantsWithoutReport.ToList();
+        if (withoutReport.Count > 0)
         {
-            events.Publish(new StaffAlertRaised(AlertKinds.BatchWithoutLabReport, "Batch without lab report",
-                $"Batch {b.Code} has no laboratory report: it is sold without the 'analysed' badge.", b.Id.ToString()));
-            alerts++;
+            events.Publish(new StaffAlertRaised(AlertKinds.BatchWithoutLabReport, $"{withoutReport.Count} batch(es) without a lab report",
+                "These batches are sold without the 'analysed' badge:\n" + string.Join('\n', withoutReport.Select(b => $"- {b.Code}")),
+                DedupeKey: $"{AlertKinds.BatchWithoutLabReport}:{today}"));
+            alerts += withoutReport.Count;
         }
 
         return alerts;

@@ -154,15 +154,15 @@ internal sealed partial class Mailer(RahiqDbContext db, IEmailTransport transpor
         {
             log.Status = "failed";
             log.Error = ex.Message;
-            LogFailed(logger, ex, template);
+            LogFailed(logger, template, ex.Message);
             throw; // The outbox retries the handler; the consumer row and this log roll back together.
         }
 
         return true;
     }
 
-    [LoggerMessage(Level = LogLevel.Warning, Message = "E-mail {Template} failed")]
-    private static partial void LogFailed(ILogger logger, Exception ex, string template);
+    [LoggerMessage(Level = LogLevel.Warning, Message = "E-mail {Template} not sent: {Reason}")]
+    private static partial void LogFailed(ILogger logger, string template, string reason);
 }
 
 internal static class Html
