@@ -92,56 +92,19 @@
 }
 .caustics-wrap { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
 
-/* ── The rose (RoseBloom): petals open from their base; transform and opacity only ───── */
-.rose { display: block; height: auto; overflow: visible; }
-.rose .petal, .rose .rose-leaf { transform-box: fill-box; transform-origin: 50% 100%; }
-.rose-leaf-a { transform-origin: 100% 50%; }
-.rose-leaf-b { transform-origin: 0% 50%; }
-@keyframes petal-open { from { opacity: 0; transform: scale(0.35) rotate(var(--tilt, 0deg)); } }
-@keyframes leaf-open { from { opacity: 0; transform: scale(0.2); } }
-.rose-hero .petal, .rose-scroll .petal { animation: petal-open 1.1s var(--ease) calc(var(--i) * 90ms + 150ms) both; }
-.rose-hero .rose-leaf, .rose-scroll .rose-leaf { animation: leaf-open 0.9s var(--ease) 0.1s both; }
-.rose .petal:nth-child(odd) { --tilt: -14deg; }
-.rose .petal:nth-child(even) { --tilt: 14deg; }
-/* Where the browser can tie it to scrolling, the story's rose opens as it enters the view; elsewhere it opens once. */
-@supports (animation-timeline: view()) {
-  .rose-scroll .petal, .rose-scroll .rose-leaf { animation-duration: 1ms; animation-delay: 0s; animation-timeline: view(); animation-range: entry 10% cover 45%; animation-timing-function: linear; }
-  .rose-scroll .petal { animation-range: entry calc(10% + var(--i) * 4%) cover calc(35% + var(--i) * 3%); }
-}
-.doors-center .rose { width: clamp(64px, 8vw, 96px); margin-block-end: -0.25rem; filter: drop-shadow(0 8px 18px rgba(52, 56, 88, 0.18)); }
-
-/* Petals drifting across the doors. Few, small, composited; none under reduced motion or on a save-data connection. */
-.petals { position: absolute; inset: 0; z-index: 2; overflow: hidden; pointer-events: none; }
-.petal-fall {
-  position: absolute; top: -24px; inset-inline-start: calc(8% + var(--n) * 16%);
-  width: 14px; height: 18px; border-radius: 80% 0 80% 0;
-  background: linear-gradient(135deg, #d9b4bc, #a8838c);
-  opacity: 0; will-change: transform, opacity;
-  animation: petal-drift calc(11s + var(--n) * 1.7s) linear calc(var(--n) * -2.3s + 1.2s) infinite;
-}
-.petal-fall:nth-child(3n) { width: 10px; height: 13px; background: linear-gradient(135deg, #f0d49a, #c7a1a9); }
-@keyframes petal-drift {
-  0% { opacity: 0; transform: translate3d(0, 0, 0) rotate(0deg); }
-  10% { opacity: 0.85; }
-  50% { transform: translate3d(40px, 50svh, 0) rotate(160deg); }
-  90% { opacity: 0.7; }
-  100% { opacity: 0; transform: translate3d(-10px, 105svh, 0) rotate(320deg); }
-}
-@media (prefers-reduced-motion: reduce) { .petals { display: none; } }
-
-/* ── From one rose: perfume, nectar, honey ───── */
-.rose-trio { margin-block-start: clamp(3rem, 7vw, 5rem); display: grid; gap: 0.5rem; }
-.rose-trio-eyebrow { color: #d9c9ae; }
-.rose-trio-title { font-size: clamp(1.4rem, 1.1rem + 1vw, 1.9rem); color: var(--canvas); margin-block-end: 1rem; }
-.rose-trio-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
-.rose-trio-list li > a, .rose-trio-list li:not(:has(a)) {
+/* ── From every flower: perfume, nectar, honey ───── */
+.bloom-trio { margin-block-start: clamp(3rem, 7vw, 5rem); display: grid; gap: 0.5rem; }
+.bloom-trio-eyebrow { color: #d9c9ae; }
+.bloom-trio-title { font-size: clamp(1.4rem, 1.1rem + 1vw, 1.9rem); color: var(--canvas); margin-block-end: 1rem; }
+.bloom-trio-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
+.bloom-trio-list li > a, .bloom-trio-list li:not(:has(a)) {
   display: grid; gap: 0.35rem; align-content: start; height: 100%; padding: 1.25rem; border-radius: var(--radius-control);
   border: 1px solid rgba(236, 233, 227, 0.16); background: rgba(236, 233, 227, 0.04); color: var(--canvas); text-decoration: none;
   transition: transform var(--base) var(--ease), background var(--base) var(--ease), border-color var(--base) var(--ease);
 }
-.rose-trio-list li > a:hover, .rose-trio-list li > a:focus-visible { transform: translateY(-3px); background: rgba(236, 233, 227, 0.08); border-color: rgba(236, 233, 227, 0.32); }
-.rose-trio-list strong { font-family: var(--font-display); font-weight: 500; font-size: 1.25rem; }
-.rose-trio-list span:not(.essence-icon) { color: #d6d0c6; font-size: 0.95rem; }
+.bloom-trio-list li > a:hover, .bloom-trio-list li > a:focus-visible { transform: translateY(-3px); background: rgba(236, 233, 227, 0.08); border-color: rgba(236, 233, 227, 0.32); }
+.bloom-trio-list strong { font-family: var(--font-display); font-weight: 500; font-size: 1.25rem; }
+.bloom-trio-list span:not(.essence-icon) { color: #d6d0c6; font-size: 0.95rem; }
 .essence-icon { width: 36px; height: 36px; border-radius: 50%; margin-block-end: 0.35rem; }
 [data-essence="perfume"] .essence-icon { background: radial-gradient(circle at 35% 30%, #c9d0ee, #343858 70%); }
 [data-essence="nectar"] .essence-icon { border-radius: 50% 0 50% 50%; transform: rotate(-45deg); background: radial-gradient(circle at 40% 40%, #fff3c9, #e6c35c 70%); }
@@ -160,14 +123,12 @@
 .ribbon { position: absolute; display: block; }
 .ribbon-perfume { background: #343858; inset-block: 0; inset-inline-start: 46%; width: 5%; }
 .ribbon-honey { background: #c07e24; inset-inline: 0; top: 46%; height: 8%; }
-.gift-rose { position: absolute; width: 22%; inset-inline-start: 37.5%; top: 20%; filter: drop-shadow(0 10px 16px rgba(42, 31, 23, 0.25)); }
 .picks[data-world] { background: color-mix(in srgb, var(--surface) 45%, var(--canvas)); }
 .story { background: var(--ink); color: var(--canvas); }
 .story { overflow: hidden; }
 .story-grid { display: grid; gap: 2rem; align-items: center; }
 @media (min-width: 900px) { .story-grid { grid-template-columns: minmax(220px, 0.8fr) 2fr; gap: 4rem; } }
 .story-visual { display: grid; place-items: center; }
-.story-visual .rose { width: min(260px, 55vw); }
 .story-inner { display: grid; gap: 1.5rem; }
 .story-inner > * { max-width: 860px; }
 .story-title { color: #d9c9ae; }
@@ -190,7 +151,6 @@
 @media (min-width: 900px) { .world-hero-inner { grid-template-columns: 1.1fr 1fr; } }
 .world-hero h1 { margin-block: 0.4rem 1rem; }
 .world-hero .lede { margin-block-end: 1.5rem; }
-.bottle-hero { height: 420px; }
 
 .journey { position: relative; background: linear-gradient(180deg, #343858, #262943 60%, #1c1e31); color: #eef0f7; }
 .journey-stage { position: relative; min-height: 100svh; overflow: hidden; display: grid; grid-template-rows: auto 1fr; }
@@ -440,3 +400,84 @@ a:hover .map-region.has, a:focus-visible .map-region.has, .map-region.current { 
 
 .admin-login { display: grid; gap: 1.25rem; max-width: 420px; }
 .secret { font-family: ui-monospace, monospace; background: var(--paper); padding: 0.5rem; border-radius: 6px; word-break: break-all; }
+
+/* ── Atmosphere pictures (Atmosphere.tsx): a blurred inline preview first, the real picture over it ───── */
+.atmosphere { position: absolute; inset: 0; overflow: hidden; background: var(--surface); }
+.atmosphere::before { content: ""; position: absolute; inset: 0; background: var(--preview) center / cover no-repeat; filter: blur(14px); transform: scale(1.12); }
+.atmosphere img { z-index: 1; }
+
+/* The doors: flowering plains for honey, perfume bottles for perfume; a scrim keeps the words readable. */
+.door-backdrop { z-index: 0; }
+.door-backdrop::after { content: ""; position: absolute; inset: 0; z-index: 2; }
+.door-perfume .door-backdrop::after { background: linear-gradient(0deg, rgba(28, 30, 49, 0.88), rgba(38, 41, 67, 0.55) 45%, rgba(52, 56, 88, 0.15)); }
+.door-honey .door-backdrop::after { background: linear-gradient(0deg, rgba(247, 239, 220, 0.94), rgba(247, 239, 220, 0.7) 45%, rgba(247, 239, 220, 0.08)); }
+.door .caustics-wrap { opacity: 0.55; }
+.door-backdrop img { transition: transform 1.6s var(--ease); }
+.door:hover .door-backdrop img, .door:focus-visible .door-backdrop img { transform: scale(1.04); }
+@media (min-width: 900px) {
+  .door-perfume .door-backdrop::after { background: linear-gradient(to right, rgba(28, 30, 49, 0.2), rgba(28, 30, 49, 0.82)); }
+  [dir="rtl"] .door-perfume .door-backdrop::after { background: linear-gradient(to left, rgba(28, 30, 49, 0.2), rgba(28, 30, 49, 0.82)); }
+  .door-honey .door-backdrop::after { background: linear-gradient(to left, rgba(247, 239, 220, 0.12), rgba(247, 239, 220, 0.9)); }
+  [dir="rtl"] .door-honey .door-backdrop::after { background: linear-gradient(to right, rgba(247, 239, 220, 0.12), rgba(247, 239, 220, 0.9)); }
+  .doors-center { inset-inline: 0; width: fit-content; max-width: min(620px, 90%); margin-inline: auto; padding: 1.25rem 2rem; border-radius: var(--radius-control); background: color-mix(in srgb, var(--canvas) 84%, transparent); box-shadow: 0 20px 50px -30px rgba(42, 31, 23, 0.5); }
+  .doors-lede { background: none; padding: 0; }
+}
+.door-honey .door-eyebrow, .door-honey .door-cta { color: var(--ink); }
+
+/* The story: the jar and the bottle under two arches. */
+.story-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; width: min(340px, 80vw); }
+.atmosphere.story-picture { position: relative; inset: auto; aspect-ratio: 4 / 5; border-radius: 999px 999px 14px 14px; }
+.atmosphere.story-picture:last-child { transform: translateY(2rem); }
+
+/* ── World heroes: a jar of honey, a bottle that sprays ───── */
+.hero-vessel { position: relative; width: min(100%, 400px); aspect-ratio: 4 / 5; justify-self: center; margin-block-start: 1.5rem; }
+.hero-vessel .atmosphere { border-radius: inherit; }
+.hero-vessel-honey { border-radius: 30px 30px 44px 44px; box-shadow: 0 40px 80px -40px rgba(90, 58, 14, 0.55); }
+.hero-vessel-honey::before { content: ""; position: absolute; z-index: 2; top: -16px; inset-inline: 8%; height: 26px; border-radius: 10px 10px 4px 4px; background: linear-gradient(180deg, #c9985a, #8a5c28 70%, #6f4a1f); box-shadow: 0 6px 12px -6px rgba(0, 0, 0, 0.5); }
+.hero-vessel-honey::after { content: ""; position: absolute; z-index: 2; inset-block: 10% 14%; inset-inline-start: 7%; width: 7%; border-radius: 999px; background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0)); pointer-events: none; }
+.hero-vessel-perfume .atmosphere { clip-path: polygon(12% 0, 88% 0, 100% 9%, 100% 91%, 88% 100%, 12% 100%, 0 91%, 0 9%); }
+.hero-vessel-perfume { filter: drop-shadow(0 30px 50px rgba(10, 12, 30, 0.55)); }
+.hero-vessel-perfume .mist { left: 27%; top: 44%; }
+
+/* ── Vessels: how each world shows its products (ProductVisual) ───── */
+.vessel { position: relative; }
+.vessel-honey { padding-block-start: 8px; }
+.vessel-honey .product-frame { border-radius: 16px 16px 26px 26px; }
+.vessel-lid { position: absolute; z-index: 2; top: 0; inset-inline: 10%; height: 15px; border-radius: 6px 6px 3px 3px; background: linear-gradient(180deg, #c9985a, #8a5c28 70%, #6f4a1f); box-shadow: 0 4px 8px -4px rgba(0, 0, 0, 0.45); }
+.vessel-drip { position: absolute; z-index: 3; top: 12px; inset-inline-start: 24%; width: 7px; height: 12px; border-radius: 0 0 5px 5px; background: linear-gradient(180deg, #e0a53a, #c07e24); transform-origin: top; transform: scaleY(0.5); transition: transform var(--slow) var(--ease); }
+.vessel-honey-level { position: absolute; inset-inline: 0; bottom: 0; height: 14%; background: linear-gradient(0deg, rgba(192, 126, 36, 0.28), transparent); transition: height var(--slow) var(--ease); pointer-events: none; }
+.product-frame:has(.placeholder) .vessel-honey-level { background: linear-gradient(0deg, rgba(214, 150, 46, 0.6), rgba(230, 195, 92, 0.3) 88%, rgba(255, 232, 170, 0.85) 95%, rgba(255, 232, 170, 0)); }
+.card-link:hover .vessel-honey-level, .card-link:focus-visible .vessel-honey-level { height: 46%; }
+.card-link:hover .vessel-drip, .card-link:focus-visible .vessel-drip { transform: scaleY(1.8); }
+.vessel-honey.is-pouring .vessel-drip { animation: drip-fall 1.4s var(--ease) both; }
+.vessel-honey.is-pouring .vessel-honey-level { height: 46%; }
+@keyframes drip-fall { 40% { transform: scaleY(2.6); } 70% { transform: scaleY(1); } }
+
+.vessel-perfume { padding-block-start: 12px; }
+.vessel-perfume .product-frame { border-radius: 0; clip-path: polygon(9% 0, 91% 0, 100% 6%, 100% 94%, 91% 100%, 9% 100%, 0 94%, 0 6%); }
+.vessel-perfume .product-frame::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.22) 42%, transparent 55%); transform: translateX(-70%); transition: transform var(--slow) var(--ease); }
+.card-link:hover .vessel-perfume .product-frame::after, .card-link:focus-visible .vessel-perfume .product-frame::after { transform: translateX(70%); }
+.vessel-cap { position: absolute; z-index: 2; top: 0; left: 50%; width: 20%; height: 16px; transform: translateX(-50%); border-radius: 4px 4px 2px 2px; background: linear-gradient(90deg, #8a6a2a, #ecd594 45%, #b38a3c 60%, #7a5c22); box-shadow: 0 3px 6px -3px rgba(0, 0, 0, 0.5); }
+.vessel-cap::before { content: ""; position: absolute; top: 5px; left: 100%; width: 7px; height: 4px; border-radius: 0 2px 2px 0; background: #b38a3c; }
+.vessel-perfume .mist { left: calc(60% + 8px); top: 7px; }
+
+/* The spray: puffs leave the atomizer, widen and fade. */
+.mist { position: absolute; z-index: 4; width: 0; height: 0; pointer-events: none; }
+.mist i { position: absolute; left: 0; top: 0; width: 24px; height: 24px; margin: -12px; border-radius: 50%; opacity: 0; background: radial-gradient(circle, rgba(240, 243, 255, 0.85), rgba(214, 222, 226, 0) 70%); --dx: calc(34px + var(--p) * 12px); --dy: calc(-6px - var(--p) * 7px); }
+@keyframes spray { 0% { opacity: 0; transform: translate(0, 0) scale(0.3); } 18% { opacity: 0.9; } 100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(3.2); } }
+@keyframes spray-loop { 0% { opacity: 0; transform: translate(0, 0) scale(0.3); } 6% { opacity: 0.85; } 42%, 100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(4); } }
+.card-link:hover .mist-hover i, .card-link:focus-visible .mist-hover i, .vessel.is-pouring .mist i { animation: spray 1.2s var(--ease) calc(var(--p) * 55ms) both; }
+.mist-loop i { width: 40px; height: 40px; margin: -20px; --dx: calc(70px + var(--p) * 26px); --dy: calc(-30px - var(--p) * 18px); animation: spray-loop 4.2s ease-out calc(var(--p) * 90ms + 0.8s) infinite; }
+@media (prefers-reduced-motion: reduce) { .mist { display: none; } }
+
+/* ── Ordering on WhatsApp ───── */
+.btn-whatsapp svg { flex: none; }
+.btn-cart { width: 100%; margin-block-start: 0.6rem; }
+.wa-float {
+  position: fixed; z-index: 45; bottom: max(1rem, env(safe-area-inset-bottom)); inset-inline-end: 1rem;
+  display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%;
+  background: #1f7a4d; color: #fff; box-shadow: 0 10px 24px -8px rgba(20, 60, 40, 0.55);
+  transition: transform var(--fast) var(--ease);
+}
+.wa-float:hover { transform: scale(1.06); }
+.cookie-banner ~ .wa-float { bottom: 9rem; }

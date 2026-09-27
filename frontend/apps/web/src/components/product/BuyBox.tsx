@@ -6,12 +6,21 @@ import { useRef, useState } from "react";
 import { useReducedMotion } from "@/lib/client/capability";
 import { openCart, useCartMutations } from "@/lib/client/cart";
 import { useErrorText, useLocale, useT } from "@/lib/client/i18n";
+import { whatsappLink } from "@/lib/shared/whatsapp";
+import { WhatsAppIcon } from "../layout/WhatsAppButton";
 
 /**
  * Size choice and add to cart. Without JavaScript the same form posts to /api/cart-form (level 4 of the
  * degradation ladder). With JavaScript the product "flies" to the cart icon once (motion that answers an action).
+ * With a WhatsApp number, ordering the chosen size on WhatsApp is the main action and the cart the second.
  */
-export function BuyBox({ variants, currency, back, isPerfume }: { variants: Variant[]; currency: string; back: string; isPerfume: boolean }) {
+export function BuyBox({ variants, currency, back, isPerfume, whatsapp }: {
+  variants: Variant[];
+  currency: string;
+  back: string;
+  isPerfume: boolean;
+  whatsapp?: { number: string; name: string; url: string } | null;
+}) {
   const t = useT();
   const locale = useLocale();
   const errorText = useErrorText();
@@ -41,6 +50,16 @@ export function BuyBox({ variants, currency, back, isPerfume }: { variants: Vari
     animation.onfinish = () => dot.remove();
   };
 
+  // The gallery's vessel answers the order once: the bottle sprays, the jar's honey drips (components.css).
+  const pour = () => {
+    const vessel = document.querySelector(".gallery .vessel");
+    if (reduced || !vessel) return;
+    vessel.classList.remove("is-pouring");
+    void (vessel as HTMLElement).offsetWidth; // Restart the animation if it is already running.
+    vessel.classList.add("is-pouring");
+    setTimeout(() => vessel.classList.remove("is-pouring"), 1600);
+  };
+
   const submit = (event: React.FormEvent, variantId: string | undefined) => {
     event.preventDefault();
     if (!variantId) return;
@@ -50,6 +69,7 @@ export function BuyBox({ variants, currency, back, isPerfume }: { variants: Vari
       {
         onSuccess: () => {
           fly();
+          pour();
           setMessage({ ok: true, text: t("product.added") });
           setTimeout(openCart, reduced ? 0 : 500);
         },
@@ -79,8 +99,24 @@ export function BuyBox({ variants, currency, back, isPerfume }: { variants: Vari
             {t("product.previousPrice")}: <s>{formatMoney(current.previousPrice, currency, locale)}</s>
           </p>
         ) : null}
-        <button ref={button} className="btn btn-buy" type="submit" disabled={!current || current.availability === "out" || add.isPending}>
-          {current && current.availability !== "out" ? `${t("product.addToCart")} · ${current.price != null ? formatMoney(current.price, currency, locale) : ""}` : t("product.unavailable")}
+        {whatsapp && current && current.availability !== "out" && (
+          <a
+            className="btn btn-buy btn-whatsapp"
+            target="_blank"
+            rel="noopener"
+            onClick={pour}
+            href={whatsappLink(
+              whatsapp.number,
+              t("whatsapp.productMessage", { name: whatsapp.name, size: current.label, price: current.price != null ? formatMoney(current.price, currency, locale) : "", url: whatsapp.url }),
+            )}
+          >
+            <WhatsAppIcon size={22} />
+            {t("whatsapp.order")}
+            {current.price != null ? ` · ${formatMoney(current.price, currency, locale)}` : ""}
+          </a>
+        )}
+        <button ref={button} className={whatsapp ? "btn btn-cart" : "btn btn-buy"} type="submit" disabled={!current || current.availability === "out" || add.isPending}>
+          {current && current.availability !== "out" ? `${t("product.addToCart")}${whatsapp ? "" : ` · ${current.price != null ? formatMoney(current.price, currency, locale) : ""}`}` : t("product.unavailable")}
         </button>
       </form>
 

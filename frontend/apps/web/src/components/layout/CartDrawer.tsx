@@ -7,8 +7,11 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useCart, useCartMutations } from "@/lib/client/cart";
 import { useErrorText, useLocale, useT } from "@/lib/client/i18n";
+import { whatsappLink } from "@/lib/shared/whatsapp";
+import { WhatsAppIcon } from "./WhatsAppButton";
 
-export function CartDrawer() {
+/** With a WhatsApp number the order goes out as a written WhatsApp message; card checkout stays as the alternative. */
+export function CartDrawer({ whatsapp }: { whatsapp?: string | null }) {
   const t = useT();
   const locale = useLocale();
   const errorText = useErrorText();
@@ -149,10 +152,33 @@ export function CartDrawer() {
                   <dd>{money(cart.total)}</dd>
                 </div>
               </dl>
-              <p className="muted small">{t("cart.shippingLater")}</p>
-              <Link className="btn btn-buy" href={`/${locale}/checkout`} onClick={() => setOpen(false)}>
-                {t("cart.checkout")}
-              </Link>
+              <p className="muted small">{whatsapp ? t("whatsapp.note") : t("cart.shippingLater")}</p>
+              {whatsapp ? (
+                <>
+                  <a
+                    className="btn btn-buy btn-whatsapp"
+                    target="_blank"
+                    rel="noopener"
+                    href={whatsappLink(
+                      whatsapp,
+                      t("whatsapp.cartMessage", {
+                        lines: cart.items.map((i) => `• ${i.qty} × ${i.name} (${i.label}) = ${money(i.total)}`).join("\n"),
+                        total: money(cart.total),
+                      }),
+                    )}
+                  >
+                    <WhatsAppIcon size={22} />
+                    {t("whatsapp.orderCart")}
+                  </a>
+                  <Link className="btn btn-quiet" href={`/${locale}/checkout`} onClick={() => setOpen(false)}>
+                    {t("whatsapp.orCard")}
+                  </Link>
+                </>
+              ) : (
+                <Link className="btn btn-buy" href={`/${locale}/checkout`} onClick={() => setOpen(false)}>
+                  {t("cart.checkout")}
+                </Link>
+              )}
             </div>
           )}
         </Dialog.Content>

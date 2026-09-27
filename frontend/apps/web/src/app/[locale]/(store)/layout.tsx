@@ -1,4 +1,4 @@
-import type { Locale } from "@rahiq/i18n";
+import { type Locale, translator } from "@rahiq/i18n";
 import { cookies } from "next/headers";
 import { type ReactNode, ViewTransition } from "react";
 import { QueryProvider } from "@/components/layout/QueryProvider";
@@ -7,11 +7,14 @@ import { CookieBanner } from "@/components/layout/CookieBanner";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
+import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
+import { config } from "@/lib/server/config";
 
 export default async function StoreLayout({ children, params }: { children: ReactNode; params: Promise<{ locale: string }> }) {
   const locale = (await params).locale as Locale;
   // Decided on the server so the banner is in the first HTML: rendered after hydration it became the LCP element.
   const undecided = !(await cookies()).has("rahiq_consent");
+  const t = translator(locale);
   return (
     <QueryProvider>
       <Header locale={locale} />
@@ -21,8 +24,9 @@ export default async function StoreLayout({ children, params }: { children: Reac
         <main id="main">{children}</main>
       </ViewTransition>
       <Footer locale={locale} />
-      <CartDrawer />
+      <CartDrawer whatsapp={config.whatsapp} />
       {undecided && <CookieBanner />}
+      {config.whatsapp && <WhatsAppButton number={config.whatsapp} label={t("whatsapp.chat")} text={t("whatsapp.hello")} />}
       <SmoothScroll />
     </QueryProvider>
   );

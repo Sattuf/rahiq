@@ -5,17 +5,17 @@ import { type MouseEvent, type ReactNode, useEffect, useRef } from "react";
 import { useReducedMotion } from "@/lib/client/capability";
 import { CausticsLayer } from "./CausticsLayer";
 
-type Door = { title: string; text: string; cta: string; href: string };
+type Door = { title: string; text: string; cta: string; href: string; backdrop?: ReactNode };
 
 /**
  * The home hero (frontend-experience.md §3.1): evening light on one side, morning light on the other. The pointer
  * (or tilting the phone) leans the light towards a side, which widens a little. Plain links underneath: it works
  * without JavaScript, without WebGL and with reduced motion. On phones the doors stack.
  * Entering a door is a view transition typed with the world, so the next page opens as that world's light spreading
- * from the point that was clicked (globals.css, "world-*"). The rose and the petals come from the server as children,
- * so their markup never ships in this component's JavaScript.
+ * from the point that was clicked (globals.css, "world-*"). Each door's picture (flowering plains, perfume bottles)
+ * comes from the server as a backdrop, so it never ships in this component's JavaScript.
  */
-export function TwoDoors({ perfume, honey, tagline, lede, rose, ambient }: { perfume: Door; honey: Door; tagline: string; lede: string; rose?: ReactNode; ambient?: ReactNode }) {
+export function TwoDoors({ perfume, honey, tagline, lede }: { perfume: Door; honey: Door; tagline: string; lede: string }) {
   const root = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
 
@@ -68,8 +68,8 @@ export function TwoDoors({ perfume, honey, tagline, lede, rose, ambient }: { per
 
   return (
     <section className="doors" ref={root} aria-label={tagline}>
-      {ambient}
       <Link href={perfume.href} className="door door-perfume" data-world="perfume" transitionTypes={["world-perfume"]} onClick={origin}>
+        {perfume.backdrop}
         <CausticsLayer world="perfume" />
         <span className="door-content">
           <span className="eyebrow door-eyebrow">{perfume.title}</span>
@@ -78,11 +78,11 @@ export function TwoDoors({ perfume, honey, tagline, lede, rose, ambient }: { per
         </span>
       </Link>
       <div className="doors-center">
-        {rose}
         <h1 className="doors-title">{tagline}</h1>
         <p className="doors-lede">{lede}</p>
       </div>
       <Link href={honey.href} className="door door-honey" data-world="honey" transitionTypes={["world-honey"]} onClick={origin}>
+        {honey.backdrop}
         <CausticsLayer world="honey" />
         <span className="door-content">
           <span className="eyebrow door-eyebrow">{honey.title}</span>

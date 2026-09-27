@@ -3,9 +3,10 @@ import { type Locale, translator } from "@rahiq/i18n";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ProductCard } from "@/components/product/ProductCard";
-import { BottleHero } from "@/components/world/BottleHero";
+import { Atmosphere } from "@/components/world/Atmosphere";
 import { CausticsLayer } from "@/components/world/CausticsLayer";
 import { FilterBar } from "@/components/world/FilterBar";
+import { Mist } from "@/components/world/Mist";
 import { NotesJourney } from "@/components/world/NotesJourney";
 import { apiGet, apiGetOrNull } from "@/lib/server/api";
 
@@ -46,7 +47,10 @@ export default async function PerfumeWorld({ params, searchParams }: { params: P
               {t("perfume.guideCta")}
             </Link>
           </div>
-          <BottleHero />
+          <div className="hero-vessel hero-vessel-perfume">
+            <Atmosphere name="perfume-spray" sizes="(max-width: 900px) 90vw, 40vw" priority />
+            <Mist mode="loop" />
+          </div>
         </div>
       </section>
 

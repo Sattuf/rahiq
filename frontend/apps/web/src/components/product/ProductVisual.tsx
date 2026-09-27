@@ -1,12 +1,17 @@
 import type { Media, Section } from "@rahiq/api-client";
 import Image from "next/image";
 import { ViewTransition } from "react";
+import { Mist } from "@/components/world/Mist";
 
 /**
  * Real product photos only (Law 8). Until the shoot, an honest drawn silhouette with a note says the photo is coming,
  * rather than a generated picture pretending to be the product.
  * `morph` names the frame for a view transition: the same name on the card and on the product page makes the picture
  * travel from the grid into the gallery instead of cutting (globals.css, ".morph"). Each name appears once per page.
+ *
+ * Each world shows its products as its own vessel (components.css, "Vessels"): honey as a jar with a lid, a drip on the
+ * rim and honey rising behind the glass; perfume as a faceted bottle under a gold atomizer that sprays when pointed at.
+ * Drawn around the picture in CSS; the picture itself is never covered or changed.
  */
 export function ProductVisual({ media, section, name, note, priority, morph, sizes = "(max-width: 700px) 50vw, 25vw" }: {
   media?: Media | null;
@@ -17,18 +22,34 @@ export function ProductVisual({ media, section, name, note, priority, morph, siz
   morph?: string;
   sizes?: string;
 }) {
+  const world = section === "shared" ? undefined : section;
   const frame = (
-    <div className="product-frame" data-world={section === "shared" ? undefined : section}>
-      {media ? (
-        <Image src={media.url} alt={media.alt ?? name} fill sizes={sizes} priority={priority} style={{ objectFit: "cover" }} />
-      ) : (
-        <div className="placeholder" role="img" aria-label={`${name}. ${note}`}>
-          {section === "perfume" ? <BottleSilhouette /> : section === "honey" ? <JarSilhouette /> : <BoxSilhouette />}
-          <span className="placeholder-note" aria-hidden="true">
-            {note}
-          </span>
-        </div>
+    <div className={world ? `vessel vessel-${world}` : "vessel"} data-world={world}>
+      {world === "honey" && (
+        <>
+          <span className="vessel-lid" aria-hidden="true" />
+          <span className="vessel-drip" aria-hidden="true" />
+        </>
       )}
+      {world === "perfume" && (
+        <>
+          <span className="vessel-cap" aria-hidden="true" />
+          <Mist mode="hover" />
+        </>
+      )}
+      <div className="product-frame">
+        {media ? (
+          <Image src={media.url} alt={media.alt ?? name} fill sizes={sizes} priority={priority} style={{ objectFit: "cover" }} />
+        ) : (
+          <div className="placeholder" role="img" aria-label={`${name}. ${note}`}>
+            {section === "perfume" ? <BottleSilhouette /> : section === "honey" ? <JarSilhouette /> : <BoxSilhouette />}
+            <span className="placeholder-note" aria-hidden="true">
+              {note}
+            </span>
+          </div>
+        )}
+        {world === "honey" && <span className="vessel-honey-level" aria-hidden="true" />}
+      </div>
     </div>
   );
   if (!morph) return frame;

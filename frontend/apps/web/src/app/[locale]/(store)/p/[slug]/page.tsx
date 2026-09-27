@@ -107,7 +107,7 @@ export default async function ProductPage({ params }: Props) {
             {card.shortDescription && <p className="lede">{card.shortDescription}</p>}
 
             {product.variants.length > 0 ? (
-              <BuyBox variants={product.variants} currency={card.currency} back={`/${locale}/p/${slug}`} isPerfume={isPerfume} />
+              <BuyBox variants={product.variants} currency={card.currency} back={`/${locale}/p/${slug}`} isPerfume={isPerfume} whatsapp={config.whatsapp ? { number: config.whatsapp, name: card.name, url: `${config.siteUrl}/${locale}/p/${slug}` } : null} />
             ) : null}
 
             {card.type === "gift_box" && (

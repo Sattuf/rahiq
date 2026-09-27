@@ -6,6 +6,8 @@ export const config = {
   sessionSecret: process.env.SESSION_SECRET ?? "development-session-secret-change-me-0123456789",
   revalidateSecret: process.env.REVALIDATE_SECRET ?? "dev-revalidate-secret",
   secureCookies: process.env.NODE_ENV === "production",
+  /** Digits with country code (e.g. 905xxxxxxxxx). Set it and buying goes through WhatsApp; leave it empty to hide it. */
+  whatsapp: (process.env.WHATSAPP_NUMBER ?? "").replace(/\D/g, "") || null,
   siteUrl: (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, ""),
   seller: {
     name: process.env.SELLER_NAME ?? "[Şirket unvanı]",

@@ -3,6 +3,7 @@ import { type Locale, translator } from "@rahiq/i18n";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ProductCard } from "@/components/product/ProductCard";
+import { Atmosphere } from "@/components/world/Atmosphere";
 import { CausticsLayer } from "@/components/world/CausticsLayer";
 import { FilterBar } from "@/components/world/FilterBar";
 import { HoneyPour } from "@/components/world/HoneyPour";
@@ -56,6 +57,9 @@ export default async function HoneyWorld({ params, searchParams }: { params: Pro
             <p className="eyebrow">{t("home.doorHoneyTitle")}</p>
             <h1>{t("honey.title")}</h1>
             <p className="lede">{t("honey.intro")}</p>
+          </div>
+          <div className="hero-vessel hero-vessel-honey">
+            <Atmosphere name="honey-jar" sizes="(max-width: 900px) 90vw, 40vw" priority />
           </div>
         </div>
       </section>
