@@ -1,13 +1,15 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { type ReactNode, useEffect, useRef } from "react";
 import { useReducedMotion } from "@/lib/client/capability";
 
 /**
  * The brand story in one scroll-linked section: the bee's morning line, the perfumer's evening line, and where they
- * meet. Arabic lines reveal as whole lines behind a mask, never letter by letter (frontend-experience.md §6).
+ * meet: the rose, which opens beside them as the section scrolls in (RoseBloom, CSS only). Arabic lines reveal as whole
+ * lines behind a mask, never letter by letter (frontend-experience.md §6). The rose and whatever follows the lines
+ * are rendered on the server and passed in, so they add nothing to this component's JavaScript.
  */
-export function StoryScroll({ title, lines }: { title: string; lines: string[] }) {
+export function StoryScroll({ title, lines, visual, children }: { title: string; lines: string[]; visual?: ReactNode; children?: ReactNode }) {
   const root = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
 
@@ -35,14 +37,18 @@ export function StoryScroll({ title, lines }: { title: string; lines: string[] }
 
   return (
     <section className="section story" ref={root}>
-      <div className="container story-inner">
-        <h2 className="story-title">{title}</h2>
-        {lines.map((line, i) => (
-          <p key={line} className={`story-line story-line-${i}`}>
-            {line}
-          </p>
-        ))}
+      <div className="container story-grid">
+        {visual && <div className="story-visual">{visual}</div>}
+        <div className="story-inner">
+          <h2 className="story-title">{title}</h2>
+          {lines.map((line, i) => (
+            <p key={line} className={`story-line story-line-${i}`}>
+              {line}
+            </p>
+          ))}
+        </div>
       </div>
+      {children}
     </section>
   );
 }

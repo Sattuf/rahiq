@@ -95,9 +95,9 @@ export default async function ProductPage({ params }: Props) {
         <div className="product-grid">
           <div className="gallery">
             {product.media.length > 0 ? (
-              product.media.map((m, i) => <ProductVisual key={m.id} media={m} section={card.section} name={card.name} note="" priority={i === 0} sizes="(max-width: 900px) 100vw, 55vw" />)
+              product.media.map((m, i) => <ProductVisual key={m.id} media={m} section={card.section} name={card.name} note="" priority={i === 0} morph={i === 0 ? `product-${card.slug}` : undefined} sizes="(max-width: 900px) 100vw, 55vw" />)
             ) : (
-              <ProductVisual section={card.section} name={card.name} note={t("common.photoSoon")} priority sizes="(max-width: 900px) 100vw, 55vw" />
+              <ProductVisual section={card.section} name={card.name} note={t("common.photoSoon")} priority morph={`product-${card.slug}`} sizes="(max-width: 900px) 100vw, 55vw" />
             )}
           </div>
 

@@ -1,6 +1,6 @@
 import type { Locale } from "@rahiq/i18n";
 import { cookies } from "next/headers";
-import type { ReactNode } from "react";
+import { type ReactNode, ViewTransition } from "react";
 import { QueryProvider } from "@/components/layout/QueryProvider";
 import { CartDrawer } from "@/components/layout/CartDrawer";
 import { CookieBanner } from "@/components/layout/CookieBanner";
@@ -15,7 +15,11 @@ export default async function StoreLayout({ children, params }: { children: Reac
   return (
     <QueryProvider>
       <Header locale={locale} />
-      <main id="main">{children}</main>
+      {/* Navigations inside the store cross-fade; entering a world from the home page opens with that world's light.
+          Only <main> animates: the header stays put. Nothing here runs in checkout (Law 10), which has its own layout. */}
+      <ViewTransition default="none" update={{ "world-perfume": "world-perfume", "world-honey": "world-honey", default: "page" }}>
+        <main id="main">{children}</main>
+      </ViewTransition>
       <Footer locale={locale} />
       <CartDrawer />
       {undecided && <CookieBanner />}

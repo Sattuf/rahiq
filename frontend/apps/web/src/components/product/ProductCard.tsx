@@ -8,7 +8,7 @@ export function ProductCard({ product, locale, priority }: { product: Card; loca
   const t = translator(locale);
   return (
     <Link href={`/${locale}/p/${product.slug}`} className="card-link">
-      <ProductVisual media={product.image} section={product.section} name={product.name} note={t("common.photoSoon")} priority={priority} />
+      <ProductVisual media={product.image} section={product.section} name={product.name} note={t("common.photoSoon")} priority={priority} morph={`product-${product.slug}`} />
       <div className="card-body">
         <h3 className="card-title">{product.name}</h3>
         {product.shortDescription && <p className="muted card-text">{product.shortDescription}</p>}

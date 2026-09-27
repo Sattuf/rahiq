@@ -542,6 +542,70 @@ img {
   padding: 1.5rem;
 }
 
+/* ── View transitions (frontend-experience.md §1): short, compositor-only, never in checkout ──────── */
+/* Clicks during a transition reach the live page instead of the overlay. */
+::view-transition {
+  pointer-events: none;
+}
+
+/* Between store pages: the old page steps out quickly, the new one settles in. Opacity and transform only. */
+::view-transition-old(.page) {
+  animation: vt-fade-out 140ms ease-in both;
+}
+
+::view-transition-new(.page) {
+  animation: vt-rise-in 260ms var(--ease) 60ms both;
+}
+
+/* Entering a world from its door: that world's light spreads from where the visitor clicked (TwoDoors sets --vt-x/y). */
+::view-transition-old(.world-perfume),
+::view-transition-old(.world-honey) {
+  animation: none;
+}
+
+::view-transition-new(.world-perfume),
+::view-transition-new(.world-honey) {
+  animation: vt-spread 620ms var(--ease) both;
+}
+
+/* A product picture travels from its card into the gallery. The blur hides scaling artefacts mid-flight. */
+::view-transition-group(.morph) {
+  animation-duration: 380ms;
+  animation-timing-function: var(--ease);
+}
+
+::view-transition-image-pair(.morph) {
+  animation-name: vt-via-blur;
+}
+
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+@keyframes vt-spread {
+  from {
+    clip-path: circle(0 at var(--vt-x, 50%) var(--vt-y, 30%));
+  }
+  to {
+    clip-path: circle(150vmax at var(--vt-x, 50%) var(--vt-y, 30%));
+  }
+}
+
+@keyframes vt-via-blur {
+  30% {
+    filter: blur(3px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -550,5 +614,11 @@ img {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
   }
 }

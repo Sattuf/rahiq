@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { type MouseEvent, type ReactNode, useEffect, useRef } from "react";
 import { useReducedMotion } from "@/lib/client/capability";
 import { CausticsLayer } from "./CausticsLayer";
 
@@ -11,8 +11,11 @@ type Door = { title: string; text: string; cta: string; href: string };
  * The home hero (frontend-experience.md §3.1): evening light on one side, morning light on the other. The pointer
  * (or tilting the phone) leans the light towards a side, which widens a little. Plain links underneath: it works
  * without JavaScript, without WebGL and with reduced motion. On phones the doors stack.
+ * Entering a door is a view transition typed with the world, so the next page opens as that world's light spreading
+ * from the point that was clicked (globals.css, "world-*"). The rose and the petals come from the server as children,
+ * so their markup never ships in this component's JavaScript.
  */
-export function TwoDoors({ perfume, honey, tagline, lede }: { perfume: Door; honey: Door; tagline: string; lede: string }) {
+export function TwoDoors({ perfume, honey, tagline, lede, rose, ambient }: { perfume: Door; honey: Door; tagline: string; lede: string; rose?: ReactNode; ambient?: ReactNode }) {
   const root = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
 
@@ -54,9 +57,19 @@ export function TwoDoors({ perfume, honey, tagline, lede }: { perfume: Door; hon
     };
   }, [reduced]);
 
+  // Where the light starts spreading from: the click, relative to <main> (the element the transition snapshots).
+  const origin = (e: MouseEvent) => {
+    const main = document.getElementById("main")?.getBoundingClientRect();
+    if (!main) return;
+    const style = document.documentElement.style;
+    style.setProperty("--vt-x", `${Math.round(e.clientX - main.left)}px`);
+    style.setProperty("--vt-y", `${Math.round(e.clientY - Math.max(main.top, 0))}px`);
+  };
+
   return (
     <section className="doors" ref={root} aria-label={tagline}>
-      <Link href={perfume.href} className="door door-perfume" data-world="perfume">
+      {ambient}
+      <Link href={perfume.href} className="door door-perfume" data-world="perfume" transitionTypes={["world-perfume"]} onClick={origin}>
         <CausticsLayer world="perfume" />
         <span className="door-content">
           <span className="eyebrow door-eyebrow">{perfume.title}</span>
@@ -65,10 +78,11 @@ export function TwoDoors({ perfume, honey, tagline, lede }: { perfume: Door; hon
         </span>
       </Link>
       <div className="doors-center">
+        {rose}
         <h1 className="doors-title">{tagline}</h1>
         <p className="doors-lede">{lede}</p>
       </div>
-      <Link href={honey.href} className="door door-honey" data-world="honey">
+      <Link href={honey.href} className="door door-honey" data-world="honey" transitionTypes={["world-honey"]} onClick={origin}>
         <CausticsLayer world="honey" />
         <span className="door-content">
           <span className="eyebrow door-eyebrow">{honey.title}</span>

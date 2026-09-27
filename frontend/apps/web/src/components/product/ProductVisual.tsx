@@ -1,19 +1,23 @@
 import type { Media, Section } from "@rahiq/api-client";
 import Image from "next/image";
+import { ViewTransition } from "react";
 
 /**
  * Real product photos only (Law 8). Until the shoot, an honest drawn silhouette with a note says the photo is coming,
  * rather than a generated picture pretending to be the product.
+ * `morph` names the frame for a view transition: the same name on the card and on the product page makes the picture
+ * travel from the grid into the gallery instead of cutting (globals.css, ".morph"). Each name appears once per page.
  */
-export function ProductVisual({ media, section, name, note, priority, sizes = "(max-width: 700px) 50vw, 25vw" }: {
+export function ProductVisual({ media, section, name, note, priority, morph, sizes = "(max-width: 700px) 50vw, 25vw" }: {
   media?: Media | null;
   section: Section;
   name: string;
   note: string;
   priority?: boolean;
+  morph?: string;
   sizes?: string;
 }) {
-  return (
+  const frame = (
     <div className="product-frame" data-world={section === "shared" ? undefined : section}>
       {media ? (
         <Image src={media.url} alt={media.alt ?? name} fill sizes={sizes} priority={priority} style={{ objectFit: "cover" }} />
@@ -26,6 +30,12 @@ export function ProductVisual({ media, section, name, note, priority, sizes = "(
         </div>
       )}
     </div>
+  );
+  if (!morph) return frame;
+  return (
+    <ViewTransition name={morph} share="morph" default="none">
+      {frame}
+    </ViewTransition>
   );
 }
 

@@ -2,6 +2,7 @@ import type { ProductCard as Card } from "@rahiq/api-client";
 import { type Locale, translator } from "@rahiq/i18n";
 import Link from "next/link";
 import { ProductCard } from "@/components/product/ProductCard";
+import { Petals, RoseBloom } from "@/components/world/RoseBloom";
 import { StoryScroll } from "@/components/world/StoryScroll";
 import { TwoDoors } from "@/components/world/TwoDoors";
 import { apiGet } from "@/lib/server/api";
@@ -31,6 +32,8 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         lede={t("home.lede")}
         perfume={{ title: t("home.doorPerfumeTitle"), text: t("home.doorPerfumeText"), cta: t("home.doorPerfumeCta"), href: `/${locale}/perfume` }}
         honey={{ title: t("home.doorHoneyTitle"), text: t("home.doorHoneyText"), cta: t("home.doorHoneyCta"), href: `/${locale}/honey` }}
+        rose={<RoseBloom variant="hero" />}
+        ambient={<Petals />}
       />
 
       <section className="section gift-band">
@@ -46,6 +49,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
           <div className="gift-band-art" aria-hidden="true">
             <span className="ribbon ribbon-perfume" />
             <span className="ribbon ribbon-honey" />
+            <RoseBloom variant="still" className="gift-rose" />
           </div>
         </div>
       </section>
@@ -71,7 +75,33 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         ),
       )}
 
-      <StoryScroll title={t("home.storyTitle")} lines={[t("home.story1"), t("home.story2"), t("home.story3")]} />
+      <StoryScroll title={t("home.storyTitle")} lines={[t("home.story1"), t("home.story2"), t("home.story3")]} visual={<RoseBloom variant="scroll" />}>
+        <div className="container rose-trio">
+          <p className="eyebrow rose-trio-eyebrow">{t("home.roseEyebrow")}</p>
+          <h3 className="rose-trio-title">{t("home.roseTitle")}</h3>
+          <ul className="rose-trio-list">
+            <li data-essence="perfume">
+              <Link href={`/${locale}/perfume`} transitionTypes={["world-perfume"]}>
+                <span className="essence-icon" aria-hidden="true" />
+                <strong>{t("home.rosePerfumeTitle")}</strong>
+                <span>{t("home.rosePerfumeText")}</span>
+              </Link>
+            </li>
+            <li data-essence="nectar">
+              <span className="essence-icon" aria-hidden="true" />
+              <strong>{t("home.roseNectarTitle")}</strong>
+              <span>{t("home.roseNectarText")}</span>
+            </li>
+            <li data-essence="honey">
+              <Link href={`/${locale}/honey`} transitionTypes={["world-honey"]}>
+                <span className="essence-icon" aria-hidden="true" />
+                <strong>{t("home.roseHoneyTitle")}</strong>
+                <span>{t("home.roseHoneyText")}</span>
+              </Link>
+            </li>
+          </ul>
+        </div>
+      </StoryScroll>
 
       <section className="section trust">
         <div className="container trust-grid">

@@ -92,6 +92,64 @@
 }
 .caustics-wrap { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
 
+/* ── The rose (RoseBloom): petals open from their base; transform and opacity only ───── */
+.rose { display: block; height: auto; overflow: visible; }
+.rose .petal, .rose .rose-leaf { transform-box: fill-box; transform-origin: 50% 100%; }
+.rose-leaf-a { transform-origin: 100% 50%; }
+.rose-leaf-b { transform-origin: 0% 50%; }
+@keyframes petal-open { from { opacity: 0; transform: scale(0.35) rotate(var(--tilt, 0deg)); } }
+@keyframes leaf-open { from { opacity: 0; transform: scale(0.2); } }
+.rose-hero .petal, .rose-scroll .petal { animation: petal-open 1.1s var(--ease) calc(var(--i) * 90ms + 150ms) both; }
+.rose-hero .rose-leaf, .rose-scroll .rose-leaf { animation: leaf-open 0.9s var(--ease) 0.1s both; }
+.rose .petal:nth-child(odd) { --tilt: -14deg; }
+.rose .petal:nth-child(even) { --tilt: 14deg; }
+/* Where the browser can tie it to scrolling, the story's rose opens as it enters the view; elsewhere it opens once. */
+@supports (animation-timeline: view()) {
+  .rose-scroll .petal, .rose-scroll .rose-leaf { animation-duration: 1ms; animation-delay: 0s; animation-timeline: view(); animation-range: entry 10% cover 45%; animation-timing-function: linear; }
+  .rose-scroll .petal { animation-range: entry calc(10% + var(--i) * 4%) cover calc(35% + var(--i) * 3%); }
+}
+.doors-center .rose { width: clamp(64px, 8vw, 96px); margin-block-end: -0.25rem; filter: drop-shadow(0 8px 18px rgba(52, 56, 88, 0.18)); }
+
+/* Petals drifting across the doors. Few, small, composited; none under reduced motion or on a save-data connection. */
+.petals { position: absolute; inset: 0; z-index: 2; overflow: hidden; pointer-events: none; }
+.petal-fall {
+  position: absolute; top: -24px; inset-inline-start: calc(8% + var(--n) * 16%);
+  width: 14px; height: 18px; border-radius: 80% 0 80% 0;
+  background: linear-gradient(135deg, #d9b4bc, #a8838c);
+  opacity: 0; will-change: transform, opacity;
+  animation: petal-drift calc(11s + var(--n) * 1.7s) linear calc(var(--n) * -2.3s + 1.2s) infinite;
+}
+.petal-fall:nth-child(3n) { width: 10px; height: 13px; background: linear-gradient(135deg, #f0d49a, #c7a1a9); }
+@keyframes petal-drift {
+  0% { opacity: 0; transform: translate3d(0, 0, 0) rotate(0deg); }
+  10% { opacity: 0.85; }
+  50% { transform: translate3d(40px, 50svh, 0) rotate(160deg); }
+  90% { opacity: 0.7; }
+  100% { opacity: 0; transform: translate3d(-10px, 105svh, 0) rotate(320deg); }
+}
+@media (prefers-reduced-motion: reduce) { .petals { display: none; } }
+
+/* ── From one rose: perfume, nectar, honey ───── */
+.rose-trio { margin-block-start: clamp(3rem, 7vw, 5rem); display: grid; gap: 0.5rem; }
+.rose-trio-eyebrow { color: #d9c9ae; }
+.rose-trio-title { font-size: clamp(1.4rem, 1.1rem + 1vw, 1.9rem); color: var(--canvas); margin-block-end: 1rem; }
+.rose-trio-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
+.rose-trio-list li > a, .rose-trio-list li:not(:has(a)) {
+  display: grid; gap: 0.35rem; align-content: start; height: 100%; padding: 1.25rem; border-radius: var(--radius-control);
+  border: 1px solid rgba(236, 233, 227, 0.16); background: rgba(236, 233, 227, 0.04); color: var(--canvas); text-decoration: none;
+  transition: transform var(--base) var(--ease), background var(--base) var(--ease), border-color var(--base) var(--ease);
+}
+.rose-trio-list li > a:hover, .rose-trio-list li > a:focus-visible { transform: translateY(-3px); background: rgba(236, 233, 227, 0.08); border-color: rgba(236, 233, 227, 0.32); }
+.rose-trio-list strong { font-family: var(--font-display); font-weight: 500; font-size: 1.25rem; }
+.rose-trio-list span:not(.essence-icon) { color: #d6d0c6; font-size: 0.95rem; }
+.essence-icon { width: 36px; height: 36px; border-radius: 50%; margin-block-end: 0.35rem; }
+[data-essence="perfume"] .essence-icon { background: radial-gradient(circle at 35% 30%, #c9d0ee, #343858 70%); }
+[data-essence="nectar"] .essence-icon { border-radius: 50% 0 50% 50%; transform: rotate(-45deg); background: radial-gradient(circle at 40% 40%, #fff3c9, #e6c35c 70%); }
+[data-essence="honey"] .essence-icon { background: radial-gradient(circle at 35% 30%, #ffc766, #c07e24 70%); }
+[data-essence="perfume"] strong { color: #c9d0ee; }
+[data-essence="nectar"] strong { color: #f0d49a; }
+[data-essence="honey"] strong { color: #ffc766; }
+
 /* ── Sections on the home page ────────── */
 .section-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-block-end: 1.5rem; flex-wrap: wrap; }
 .gift-band-inner { display: grid; gap: 2rem; align-items: center; }
@@ -102,8 +160,14 @@
 .ribbon { position: absolute; display: block; }
 .ribbon-perfume { background: #343858; inset-block: 0; inset-inline-start: 46%; width: 5%; }
 .ribbon-honey { background: #c07e24; inset-inline: 0; top: 46%; height: 8%; }
+.gift-rose { position: absolute; width: 22%; inset-inline-start: 37.5%; top: 20%; filter: drop-shadow(0 10px 16px rgba(42, 31, 23, 0.25)); }
 .picks[data-world] { background: color-mix(in srgb, var(--surface) 45%, var(--canvas)); }
 .story { background: var(--ink); color: var(--canvas); }
+.story { overflow: hidden; }
+.story-grid { display: grid; gap: 2rem; align-items: center; }
+@media (min-width: 900px) { .story-grid { grid-template-columns: minmax(220px, 0.8fr) 2fr; gap: 4rem; } }
+.story-visual { display: grid; place-items: center; }
+.story-visual .rose { width: min(260px, 55vw); }
 .story-inner { display: grid; gap: 1.5rem; }
 .story-inner > * { max-width: 860px; }
 .story-title { color: #d9c9ae; }
@@ -111,6 +175,7 @@
 :lang(ar) .story-line { line-height: 1.7; }
 .story-line-1 { color: #c9d0ee; }
 .story-line-0 { color: #f0d49a; }
+.trust, .gift-band, .picks { content-visibility: auto; contain-intrinsic-size: auto 640px; }
 .trust-grid { display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
 .trust-grid h3 { margin-block-end: 0.5rem; }
 
@@ -172,6 +237,9 @@ a:hover .map-region.has, a:focus-visible .map-region.has, .map-region.current { 
 .card-text { margin: 0; font-size: 0.92rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .card-meta { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
 .card-body { display: grid; gap: 0.35rem; }
+.product-frame img, .product-frame .placeholder svg { transition: transform var(--slow) var(--ease); }
+.card-link:hover .product-frame img, .card-link:focus-visible .product-frame img { transform: scale(1.04); }
+.card-link:hover .placeholder svg, .card-link:focus-visible .placeholder svg { transform: translateY(-4px) scale(1.03); }
 
 /* ── Product page ─────────────────────── */
 .product-page { padding-block: 1.5rem 4rem; }
